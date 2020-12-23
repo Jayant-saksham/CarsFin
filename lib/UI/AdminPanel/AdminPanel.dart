@@ -5,14 +5,16 @@ import 'AdminWidgets/CardWidget.dart';
 import 'AdminWidgets/AdminDrawer.dart';
 import 'AdminSubpages/Settings.dart';
 import 'package:Cars/backend/FirebaseAdmin.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 String imageUrl =
     'https://scontent.fdel5-1.fna.fbcdn.net/v/t1.0-9/480128_4549413205633_620077564_n.jpg?_nc_cat=110&ccb=2&_nc_sid=de6eea&_nc_ohc=g2eXmmK70kAAX8F5J6A&_nc_ht=scontent.fdel5-1.fna&oh=193ce9613936ce743efebab7d0b200e5&oe=60013BFF';
 GlobalKey<ScaffoldState> drawerKey = GlobalKey();
 AdminFirebase adminFirebase;
-int countUsers;
-int countCar;
-int countAgency;
+var userReference = FirebaseFirestore.instance.collection("Users");
+var carReference = FirebaseFirestore.instance.collection("Cars");
+var agencyReference = FirebaseFirestore.instance.collection("Agency");
+var adminReference = FirebaseFirestore.instance.collection("Admin");
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -20,37 +22,62 @@ class AdminPanel extends StatefulWidget {
 }
 
 class _AdminPanelState extends State<AdminPanel> {
-  Future<int> getUser() async {
-    await AdminFirebase().countUsers().then((users) {
-      setState(() {
-        countUsers = users;
+  int countUsers = 0;
+  int countCar = 0;
+  int countAgency = 0;
+  int carsApproved = 0;
+  countCars() async {
+    carReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            setState(() {
+              countCar++;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  totalCarsApproved() async {
+    adminReference.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        setState(() {
+          carsApproved = element.data()['Cars Approved'];
+        });
       });
     });
   }
 
-  Future<int> countCars() async {
-    await AdminFirebase().countCars().then((cars) {
-      setState(() {
-        countCar = cars;
-      });
-    });
+  countUser() async {
+    userReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            setState(() {
+              countUsers++;
+            });
+          },
+        );
+      },
+    );
   }
 
-  Future<int> countAgencies() async {
-    await AdminFirebase().countAgencies().then((agency) {
-      setState(() {
-        countAgency = agency;
+  countAgencies() async {
+    agencyReference.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        setState(() {
+          countAgency++;
+        });
       });
     });
-  }
-
-  Future<List> users() async {
-    return adminFirebase.getAllUser();
   }
 
   @override
   void initState() {
-    getUser();
+    totalCarsApproved();
+    countUser();
     countCars();
     super.initState();
   }
@@ -68,7 +95,7 @@ class _AdminPanelState extends State<AdminPanel> {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Settings(),
+              builder: (context) => Setting(),
             ),
           ),
         ),
@@ -112,7 +139,7 @@ class _AdminPanelState extends State<AdminPanel> {
               height: 20,
             ),
             Text(
-              "Total Cars sold",
+              "Total Cars Approved",
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -123,7 +150,7 @@ class _AdminPanelState extends State<AdminPanel> {
               height: 22,
             ),
             Text(
-              "17",
+              carsApproved.toString(),
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

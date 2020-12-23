@@ -180,7 +180,7 @@ Widget carAdLong(Car car, context) {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Image.asset(
+                    child: Image.network(
                       car.images[0],
                       width: 160,
                     ),
@@ -192,12 +192,6 @@ Widget carAdLong(Car car, context) {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
-                        ),
-                      ),
-                      Text(
-                        car.location,
-                        style: TextStyle(
-                          color: Colors.grey,
                         ),
                       ),
                       SizedBox(

@@ -4,22 +4,26 @@ import 'package:Cars/UI/Widgets/AppBar.dart';
 String url =
     'https://assets.materialup.com/uploads/53a51966-b17f-4f52-a2d8-e34c38b12d5c/preview';
 
-class Settings extends StatefulWidget {
+class Setting extends StatefulWidget {
   @override
-  _SettingsState createState() => _SettingsState();
+  _SettingState createState() => _SettingState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingState extends State<Setting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(
-          title: "Settings",
-          isLeading: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
-          )),
+        title: "Settings",
+        isLeading: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(33.0),

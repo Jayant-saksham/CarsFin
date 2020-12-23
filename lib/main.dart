@@ -1,6 +1,8 @@
 import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
+import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       debugShowCheckedModeBanner: false,
-      home: AuthService().handleAuth(),
+      home: BottomNavScreen(),
     );
   }
 }

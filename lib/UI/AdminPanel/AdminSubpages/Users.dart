@@ -1,4 +1,3 @@
-import 'package:Cars/backend/FirebaseAdmin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,6 +12,29 @@ class AllUsers extends StatefulWidget {
 }
 
 class AllUsersState extends State<AllUsers> {
+  List name = [];
+  List images = [];
+  getAllUser() async {
+    userReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            setState(() {
+              name.add(element.data()["userName"]);
+              images.add(element.data()["Image"]);
+            });
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,25 +50,25 @@ class AllUsersState extends State<AllUsers> {
         ),
       ),
       backgroundColor: Colors.white,
-      // body: StreamBuilder(
-      //   stream: userReference.snapshots(),
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasData) {
-      //       final List list = AdminFirebase().getAllUser();
-      //       return Container(
-      //         child: ListView(
-      //           children: list.map((user) {
-      //             return ListTile(
-      //               title: user,
-      //             );
-      //           }).toList(),
-      //         ),
-      //       );
-      //     } else {
-      //       return circularProgress();
-      //     }
-      //   },
-      // ));
+      body: StreamBuilder(
+        stream: userReference.snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              child: ListView(
+                children: name.map((c) {
+                  return ListTile(
+                    leading: CircleAvatar(),
+                    title: Text(c),
+                  );
+                }).toList(),
+              ),
+            );
+          } else {
+            return circularProgress();
+          }
+        },
+      ),
     );
   }
 }

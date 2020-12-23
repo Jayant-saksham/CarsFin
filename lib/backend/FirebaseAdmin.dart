@@ -35,7 +35,7 @@ class AdminFirebase {
       (snapshot) {
         snapshot.docs.forEach(
           (element) {
-            count += 1;
+            count++;
           },
         );
       },
@@ -68,6 +68,16 @@ class AdminFirebase {
         );
       },
     );
+    return list;
+  }
+
+  Future<List> getUserNames() async {
+    List<String> list;
+    userReference.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        list.add(element.data()["userName"]);
+      });
+    });
     return list;
   }
 

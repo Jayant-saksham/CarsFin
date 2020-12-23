@@ -13,7 +13,9 @@ Widget buildCar(Car car, int index) {
       ),
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(
-          right: index != null ? 15 : 0, left: index == 0 ? 16 : 0),
+        right: index != null ? 15 : 0,
+        left: index == 0 ? 16 : 0,
+      ),
       width: 180,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
