@@ -156,11 +156,8 @@ class _NamePageState extends State<NamePage> {
                   child: MaterialButton(
                     color: Colors.indigo,
                     onPressed: () {
-                      var instance = FirebaseAuth.instance.currentUser;
-                      String uid = instance.uid;
                       setState(() {
                         user = Users(
-                          uid: uid,
                           name: userName,
                           phoneNumber: widget.userPhone,
                           image: userImage,

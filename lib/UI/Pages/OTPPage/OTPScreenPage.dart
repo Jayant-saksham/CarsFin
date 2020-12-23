@@ -2,7 +2,6 @@ import 'package:Cars/UI/Pages/NamePage/NamePage.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:Cars/backend/FirebaseAuth.dart';
-import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
 
 class OTPScreenPage extends StatefulWidget {
   String phoneNumber;
@@ -121,7 +120,6 @@ class _OTPScreenPageState extends State<OTPScreenPage> {
               setState(() {
                 smsCode = pin;
               });
-              print(smsCode);
             },
           ),
           Text(

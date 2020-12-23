@@ -1,3 +1,4 @@
+import 'package:Cars/UI/Pages/NamePage/NamePage.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'AdminWidgets/CardWidget.dart';
@@ -9,7 +10,9 @@ String imageUrl =
     'https://scontent.fdel5-1.fna.fbcdn.net/v/t1.0-9/480128_4549413205633_620077564_n.jpg?_nc_cat=110&ccb=2&_nc_sid=de6eea&_nc_ohc=g2eXmmK70kAAX8F5J6A&_nc_ht=scontent.fdel5-1.fna&oh=193ce9613936ce743efebab7d0b200e5&oe=60013BFF';
 GlobalKey<ScaffoldState> drawerKey = GlobalKey();
 AdminFirebase adminFirebase;
-int count;
+int countUsers;
+int countCar;
+int countAgency;
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -18,8 +21,27 @@ class AdminPanel extends StatefulWidget {
 
 class _AdminPanelState extends State<AdminPanel> {
   Future<int> getUser() async {
-    count = await AdminFirebase().countUsers();
-    return count;
+    await AdminFirebase().countUsers().then((users) {
+      setState(() {
+        countUsers = users;
+      });
+    });
+  }
+
+  Future<int> countCars() async {
+    await AdminFirebase().countCars().then((cars) {
+      setState(() {
+        countCar = cars;
+      });
+    });
+  }
+
+  Future<int> countAgencies() async {
+    await AdminFirebase().countAgencies().then((agency) {
+      setState(() {
+        countAgency = agency;
+      });
+    });
   }
 
   Future<List> users() async {
@@ -29,7 +51,7 @@ class _AdminPanelState extends State<AdminPanel> {
   @override
   void initState() {
     getUser();
-    users();
+    countCars();
     super.initState();
   }
 
@@ -119,7 +141,7 @@ class _AdminPanelState extends State<AdminPanel> {
                       Icon(Icons.supervised_user_circle, color: Colors.white),
                   backgroundColor: Colors.amber,
                   title: "Users",
-                  content: count.toString(),
+                  content: countUsers.toString(),
                   titleColor: Colors.indigo,
                   contentColor: Colors.white,
                 ),
@@ -130,7 +152,7 @@ class _AdminPanelState extends State<AdminPanel> {
                   ),
                   backgroundColor: Colors.indigo,
                   title: "Cars",
-                  content: "9460",
+                  content: countCar.toString(),
                   titleColor: Colors.amber,
                   contentColor: Colors.white,
                 ),
@@ -149,7 +171,7 @@ class _AdminPanelState extends State<AdminPanel> {
                       ),
                       backgroundColor: Colors.pink,
                       title: "Agencies",
-                      content: "94",
+                      content: countAgency.toString(),
                       titleColor: Colors.white,
                       contentColor: Colors.white,
                     ),

@@ -93,19 +93,36 @@ class _UserLoginState extends State<UserLogin> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      FirebaseFunctions().getUser(phoneNo).then((value) {
+                      FirebaseFunctions()
+                          .checkIfUserExist(phoneNo)
+                          .then((value) {
                         setState(() {
                           isExist = value;
                         });
                       });
+                      print(isExist);
                       if (isExist) {
-                        print("Exit");
-                        // codeSent
-                        //     ? AuthService()
-                        //         .signInWithOTP(smsCode, verificationId)
-                        //     : verifyPhone(phoneNo);
+                        Fluttertoast.showToast(
+                          msg: "User exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        AuthService().signInWithOTP(smsCode, verificationId);
                       } else {
-                        print("DOES NOT");
+                        Fluttertoast.showToast(
+                          msg: "User does not exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        Navigator.pop(context);
                       }
                     },
                     child: Container(
@@ -169,9 +186,6 @@ class _UserLoginState extends State<UserLogin> {
       validator: (value) {
         if (value.isEmpty) {
           return 'Number is required';
-        }
-        if (!value.contains(".") && !value.contains("@")) {
-          return "Invalid email";
         }
       },
       onChanged: (value) {

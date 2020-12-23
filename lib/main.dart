@@ -1,6 +1,6 @@
+import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       debugShowCheckedModeBanner: false,
-      home: AdminPanel(),
+      home: AuthService().handleAuth(),
     );
   }
 }

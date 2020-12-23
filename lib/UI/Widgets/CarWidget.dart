@@ -2,10 +2,9 @@ import 'package:Cars/Models/Cars.dart';
 import 'package:Cars/Themes/constants.dart';
 import 'package:flutter/material.dart';
 
-
-Widget buildCar(Car car, int index){
+Widget buildCar(Car car, int index) {
   return SingleChildScrollView(
-      child: Container(
+    child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -14,9 +13,7 @@ Widget buildCar(Car car, int index){
       ),
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(
-        right: index != null ? 15 : 0, 
-        left: index == 0 ? 16 : 0
-      ),
+          right: index != null ? 15 : 0, left: index == 0 ? 16 : 0),
       width: 180,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -31,10 +28,7 @@ Widget buildCar(Car car, int index){
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 8, 
-                  vertical: 0
-                ),
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
                 child: Text(
                   car.condition,
                   style: TextStyle(
@@ -61,18 +55,13 @@ Widget buildCar(Car car, int index){
               ),
             ),
           ),
-
           SizedBox(
             height: 20,
           ),
-
           Text(
             car.model,
-            style: TextStyle(
-              fontSize: 18
-            ),
+            style: TextStyle(fontSize: 18),
           ),
-
           SizedBox(
             height: 8,
           ),
@@ -85,7 +74,12 @@ Widget buildCar(Car car, int index){
             ),
           ),
           Text(
-            "per " + (car.condition == "Daily" ? "day" : car.condition == "Weekly" ? "week" : "month"),
+            "per " +
+                (car.condition == "Daily"
+                    ? "day"
+                    : car.condition == "Weekly"
+                        ? "week"
+                        : "month"),
             style: TextStyle(
               fontSize: 14,
               color: kPrimaryColor,

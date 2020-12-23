@@ -122,6 +122,11 @@ class _SellCarState extends State<SellCar> {
 
   Widget carNumber() {
     return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Cannot be empty";
+        }
+      },
       textCapitalization: TextCapitalization.characters,
       decoration: InputDecoration(
         hintText: "Enter Car Number - (DLASAA7783)",
@@ -138,6 +143,11 @@ class _SellCarState extends State<SellCar> {
 
   Widget brand() {
     return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Cannot be empty";
+        }
+      },
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         hintText: "Enter Car's brand",
@@ -154,6 +164,11 @@ class _SellCarState extends State<SellCar> {
 
   Widget brandModelNumber() {
     return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Cannot be empty";
+        }
+      },
       textCapitalization: TextCapitalization.words,
       decoration: InputDecoration(
         hintText: "Enter Car's Model Number",
@@ -170,6 +185,11 @@ class _SellCarState extends State<SellCar> {
 
   Widget kmDriven() {
     return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return "Cannot be empty";
+        }
+      },
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         hintText: "Enter Car Driven (in KM)",

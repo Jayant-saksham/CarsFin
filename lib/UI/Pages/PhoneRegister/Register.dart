@@ -297,7 +297,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNo,
-      timeout: const Duration(seconds: 30),
+      timeout: const Duration(
+        seconds: 30,
+      ),
       verificationCompleted: verified,
       verificationFailed: verificationfailed,
       codeSent: smsSent,

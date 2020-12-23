@@ -12,9 +12,7 @@ Widget myDrawer(String userName, String phoneNumber, String userImage) {
           decoration: BoxDecoration(
             color: kPrimaryColor,
           ),
-          accountEmail: phoneNumber.length == 0
-              ? Text("")
-              : Text(
+          accountEmail: Text(
                   "${phoneNumber}",
                   style: TextStyle(
                     color: Colors.white,

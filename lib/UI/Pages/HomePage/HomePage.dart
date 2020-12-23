@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:Cars/Models/Cars.dart';
+import 'package:Cars/Models/Users.dart';
 import 'package:Cars/Themes/constants.dart';
 import 'package:Cars/UI/Widgets/Drawer.dart';
+import 'package:Cars/backend/FirebaseBackend.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/Models/Dealers.dart';
 import 'DealerWidget.dart';
@@ -13,20 +16,20 @@ import 'package:Cars/UI/Widgets/AppBar.dart';
 
 class HomePage extends StatefulWidget {
   // String userName;
-  // String phoneNumber;
+  String phoneNumber;
   // String userPhoto;
-  // HomePage({
-  //   this.userName,
-  //   this.phoneNumber,
-  //   this.userPhoto,
-  // });
+  HomePage({
+    // this.userName,
+    this.phoneNumber,
+    // this.userPhoto,
+  });
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   // String get userName => widget.userName;
-  // String get phoneNumber => widget.phoneNumber;
+  String get phoneNumber => widget.phoneNumber;
   // String get userImage => widget.userPhoto;
   List<Dealer> dealers = getDealerList();
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
@@ -46,11 +49,10 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: myDrawer(
-        "",
-        "",
-        // userImage,
-        ''
-      ),
+          "",
+          phoneNumber.toString(),
+          // userImage,
+          ''),
       body: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(

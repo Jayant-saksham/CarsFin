@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 var userReference = FirebaseFirestore.instance.collection("Users");
 var carReference = FirebaseFirestore.instance.collection("Cars");
+var agencyReference = FirebaseFirestore.instance.collection("Agency");
 
 class AdminFirebase {
   Future<void> changePassword(String oldPassword, String newPassword) {
@@ -68,5 +69,19 @@ class AdminFirebase {
       },
     );
     return list;
+  }
+
+  Future<int> countAgencies() async {
+    int count = 0;
+    agencyReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            count += 1;
+          },
+        );
+      },
+    );
+    return count;
   }
 }

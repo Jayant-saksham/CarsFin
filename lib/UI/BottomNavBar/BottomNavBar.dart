@@ -1,13 +1,14 @@
 import 'package:Cars/UI/Pages/SellCar/SellCar.dart';
+import 'package:Cars/backend/FirebaseBackend.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/Pages/HomePage/AvailableCars.dart';
-import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
 import 'package:Cars/UI/Pages/HomePage/HomePage.dart';
 import 'package:Cars/UI/Pages/UserProfile/UserProfile.dart';
-import 'package:Cars/Models/Users.dart';
 import 'package:Cars/UI/Pages/NotificationPage/NotificationPage.dart';
 
 class BottomNavScreen extends StatefulWidget {
+  String phoneNumber;
+  BottomNavScreen({this.phoneNumber});
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();
 }
@@ -15,10 +16,22 @@ class BottomNavScreen extends StatefulWidget {
 class _BottomNavScreenState extends State<BottomNavScreen> {
   PageController pageController;
   int _currentIndex = 0;
+  var user;
+  getCurrentUser() async {
+    await FirebaseFunctions().getUser(widget.phoneNumber).then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+
+    print(user);
+  }
+
   @override
   void initState() {
     super.initState();
     pageController = PageController();
+    getCurrentUser();
   }
 
   @override

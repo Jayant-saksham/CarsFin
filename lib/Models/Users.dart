@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 class Users {
-  String uid;
   String name;
   String phoneNumber;
   String location;
@@ -12,7 +11,6 @@ class Users {
   int carBought;
   String dateofBirth;
   Users({
-    @required this.uid,
     this.location,
     @required this.name,
     @required this.phoneNumber,

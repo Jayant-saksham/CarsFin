@@ -13,11 +13,13 @@ class FirebaseFunctions {
       final FirebaseStorage storage =
           FirebaseStorage(storageBucket: 'gs://carsfin-5a805.appspot.com');
       String imagePath = "Users/Images/${users.phoneNumber}.png";
-
+      String userImageUrl;
       UploadTask uploadTask;
       uploadTask = storage.ref().child(imagePath).putFile(users.image);
-      String userImageUrl =
-          await storage.ref().child(imagePath).getDownloadURL();
+      var url = (await uploadTask).ref.getDownloadURL().then(
+            (value) => userImageUrl = value.toString(),
+          );
+
       var response = await FirebaseFirestore.instance
           .collection("Users")
           .doc(users.phoneNumber)
@@ -53,22 +55,23 @@ class FirebaseFunctions {
   Future<void> createCarRecord(Car car) async {
     final FirebaseStorage storage =
         FirebaseStorage(storageBucket: 'gs://carsfin-5a805.appspot.com');
-    String imagePath = "Cars/Images/${car.carNumber}/${car.carNumber}.png";
-    List<String> imageUrl;
+    List<String> imageUrl = [];
 
     UploadTask uploadTask;
     for (int i = 0; i < car.images.length; i++) {
-      var now = new DateTime.now().toString();
-      uploadTask =
-          storage.ref().child(imagePath + i.toString()).putFile(car.images[i]);
-      String url =
-          await storage.ref().child(imagePath + i.toString()).getDownloadURL();
-      imageUrl.add(url);
+      String imagePath = "Cars/Images/${car.carNumber}/${car.carNumber}.png";
+      uploadTask = storage.ref().child(imagePath).putFile(car.images[i]);
+
+      var url = (await uploadTask)
+          .ref
+          .getDownloadURL()
+          .then((value) => imageUrl.add(value.toString()));
     }
 
-    var response = await FirebaseFirestore.instance;
+    var response = FirebaseFirestore.instance;
     await response.collection("Cars").doc(car.carNumber).set(
       {
+        "TimeStamp": DateTime.now().toString(),
         "Price": car.price,
         "Car Number": car.carNumber,
         "Car brand": car.brand,
@@ -99,7 +102,8 @@ class FirebaseFunctions {
 
       UploadTask uploadTask;
       uploadTask = storage.ref().child(imagePath).putFile(agency.images);
-      var agencyurl = await storage.ref().child(imagePath).getDownloadURL();
+      String agencyurl =
+          await (await uploadTask).ref.getDownloadURL().toString();
       var response = await FirebaseFirestore.instance
           .collection("Agency")
           .doc(agency.agencyPhoneNumber)
@@ -121,6 +125,7 @@ class FirebaseFunctions {
           .doc(agency.agencyPhoneNumber)
           .set(
         {
+          "Timestamp": DateTime.now().toString(),
           "Phone Number": agency.agencyPhoneNumber,
           "Name": agency.agencyName,
           "Location": agency.agencyLocation,
@@ -136,9 +141,10 @@ class FirebaseFunctions {
   Future getUser(String phoneNumber) async {
     String phoneNumbe =
         phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
+    print(phoneNumbe);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumbe).get();
-    return documentSnapshot.data();
+    print(documentSnapshot.data());
   }
 
   Future getAgency(String phoneNumber) async {
@@ -152,6 +158,7 @@ class FirebaseFunctions {
         phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumbe).get();
+    print(documentSnapshot.data());
     if (documentSnapshot.exists) {
       return true;
     } else {
