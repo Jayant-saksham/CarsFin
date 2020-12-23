@@ -12,24 +12,26 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.0
-  equatable: ^1.2.5
   google_fonts: ^1.1.0
+  flutter_absolute_path: ^1.0.6
   hexcolor: ^1.0.6
+  geocoding: ^1.0.2 
   eva_icons_flutter: ^2.0.0
   firebase_auth: ^0.18.3+1
+  simple_animations: ^2.4.2
   firebase_core: any
+  image: ^2.1.19
   fluttertoast: ^7.1.5
   geolocator: ^6.1.8+1
   geocoder: ^0.2.1
-  camera: ^0.5.8+11
   pin_code_fields: ^6.0.1
   country_pickers: ^1.3.0
   cloud_firestore: any
-  email_validator: ^1.0.6
   image_picker: ^0.6.7+14
-  simple_animations: ^1.1.3
   page_transition: ^1.1.4
   firebase_storage: any
+  flutter_datetime_picker: ^1.4.0
+  multi_image_picker: ^4.7.14
 
 dev_dependencies:
   flutter_test:
@@ -37,7 +39,6 @@ dev_dependencies:
 
 
 flutter:
-
   uses-material-design: true
 
   assets:
