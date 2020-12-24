@@ -12,18 +12,22 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String userName;
-  Future getUser(String phoneNumber) async {
+  Future getUser() async {
+    String phoneNumber = await FirebaseAuth.instance.currentUser.phoneNumber;
+    print(phoneNumber);
     String phoneNumbe =
         phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
     print(phoneNumbe);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumbe).get();
-    print(documentSnapshot.data());
+    setState(() {
+      userName = documentSnapshot.data()['userName'];
+    });
   }
 
   @override
   void initState() {
-    // getUser(FirebaseAuth.instance.currentUser.phoneNumber);
+    getUser();
     super.initState();
   }
 
@@ -54,7 +58,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 90.0),
                 Text(
-                  'User',
+                  userName==null?"User":userName,
                   style: TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,

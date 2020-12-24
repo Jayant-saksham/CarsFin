@@ -55,22 +55,7 @@ Widget myDrawer(
           title: Text("Cars"),
           leading: Icon(EvaIcons.hardDrive),
         ),
-        SizedBox(height: 10),
-        ListTile(
-          title: Text("Admin"),
-          leading: Icon(EvaIcons.activity),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  Login();
-                },
-              ),
-            );
-          },
-        ),
+        
         SizedBox(height: 10),
         SizedBox(height: 20),
         Divider(),

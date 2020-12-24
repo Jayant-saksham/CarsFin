@@ -68,6 +68,7 @@ class _OTPScreenPageState extends State<OTPScreenPage> {
                   color: Colors.indigo,
                   onPressed: () {
                     AuthService().signInWithOTP(smsCode, widget.verificationID);
+                    Navigator.pop(context);
                     Navigator.push(
                       context,
                       MaterialPageRoute(

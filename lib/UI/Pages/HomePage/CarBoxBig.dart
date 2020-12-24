@@ -67,6 +67,25 @@ Widget carAdLong(Car car, context) {
                       : SizedBox(
                           width: 10,
                         ),
+                  //   car.hasRC
+                  // ? Container(
+                  //     width: 90,
+                  //     decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //       color: Colors.indigo,
+                  //     ),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "RC",
+                  //         style: TextStyle(
+                  //           color: Colors.white,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   )
+                  // : SizedBox(
+                  //     width: 10,
+                  //   ),
                 ],
               ),
               SizedBox(
@@ -183,7 +202,7 @@ Widget carAdLong(Car car, context) {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: Image.network(
                       car.images[0],

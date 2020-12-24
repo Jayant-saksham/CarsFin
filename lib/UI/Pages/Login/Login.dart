@@ -59,7 +59,7 @@ class _LoginState extends State<Login> {
                     left: 25,
                     right: 25,
                   ),
-                  child: _enterPhoneNumber(),
+                  child: _enterEmail(),
                 ),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
@@ -69,8 +69,10 @@ class _LoginState extends State<Login> {
                     left: 25,
                     right: 25,
                   ),
-                  child: _enterEmail(),
+                  child: _enterPhoneNumber(),
                 ),
+                
+                
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
@@ -138,7 +140,6 @@ class _LoginState extends State<Login> {
 
   Widget _enterEmail() {
     return TextFormField(
-      obscureText: true,
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
@@ -155,7 +156,7 @@ class _LoginState extends State<Login> {
       },
       onChanged: (value) {
         setState(() {
-          inputEmail = value;
+          inputEmail = value.trim();
         });
       },
     );
@@ -163,6 +164,8 @@ class _LoginState extends State<Login> {
 
   Widget _enterPhoneNumber() {
     return TextFormField(
+      obscureText: true,
+
       // textInputAction: TextInputAction.next,
       validator: (value) {
         if (value.isEmpty) {
@@ -176,7 +179,7 @@ class _LoginState extends State<Login> {
       ),
       onChanged: (value) {
         setState(() {
-          inputPasswrod = value;
+          inputPasswrod = value.trim();
         });
       },
     );

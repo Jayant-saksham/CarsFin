@@ -15,6 +15,21 @@ class UserLogin extends StatefulWidget {
 class _UserLoginState extends State<UserLogin> {
   bool codeSent = false;
   String phoneNo, verificationId, smsCode;
+  Future checkIfUserExist(String phoneNumber) async {
+    final DocumentSnapshot documentSnapshot =
+        await userReference.doc(phoneNumber).get();
+    print(documentSnapshot.data());
+    if (documentSnapshot.exists) {
+      setState(() {
+        isExist = true;
+      });
+    } else {
+      setState(() {
+        isExist = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,20 +105,7 @@ class _UserLoginState extends State<UserLogin> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      Future checkIfUserExist(String phoneNumber) async {
-                        String phoneNumbe = phoneNumber.substring(0, 3) +
-                            " " +
-                            phoneNumber.substring(3, 13);
-                        final DocumentSnapshot documentSnapshot =
-                            await userReference.doc(phoneNumbe).get();
-                        print(documentSnapshot.data());
-                        if (documentSnapshot.exists) {
-                          return true;
-                        } else {
-                          return false;
-                        }
-                      }
-
+                      checkIfUserExist(phoneNo);
                       if (isExist) {
                         Fluttertoast.showToast(
                           msg: "User exist",
@@ -114,7 +116,7 @@ class _UserLoginState extends State<UserLogin> {
                           textColor: Colors.white,
                           fontSize: 16.0,
                         );
-                        AuthService().signInWithOTP(smsCode, verificationId);
+                        verifyPhone(phoneNo);
                       } else {
                         Fluttertoast.showToast(
                           msg: "User does not exist",
@@ -138,7 +140,13 @@ class _UserLoginState extends State<UserLogin> {
                       height: 36,
                       width: MediaQuery.of(context).size.width * 0.46,
                       child: Center(
-                        child: Text(
+                       child: codeSent?  Text(
+                          "Login",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ): Text(
                           "Login",
                           style: TextStyle(
                             fontSize: 20,

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.indigo),
       debugShowCheckedModeBanner: false,
-      home: BottomNavScreen(phoneNumber: "+91 9319970199",),
+      home: AuthService().handleAuth(),
     );
   }
 }

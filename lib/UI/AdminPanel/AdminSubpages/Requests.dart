@@ -160,7 +160,7 @@ class _RequestsState extends State<Requests> {
     );
   }
 
-  approveCar(carNumber) async {
+  void approveCar(carNumber) async {
     int approvedCars;
     var response = await FirebaseFirestore.instance;
     response.collection("Cars").doc(carNumber).update(

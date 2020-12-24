@@ -30,7 +30,10 @@ Widget buildCar(Car car, int index) {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 0,
+                ),
                 child: Text(
                   car.condition,
                   style: TextStyle(

@@ -14,8 +14,8 @@ import 'package:hexcolor/hexcolor.dart';
 import 'CarBoxShort.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-var carReference = FirebaseFirestore.instance.collection("Cars");
 
+var carReference = FirebaseFirestore.instance.collection("Cars");
 
 class HomePage extends StatefulWidget {
   String userName;
@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   // String get userName => widget.userName;
   String get phoneNumber => widget.phoneNumber;
   // String get userImage => widget.userPhoto;
-  List<Dealer> dealers = getDealerList();
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
   List<Car> cars = [];
   List allCars = [];
@@ -248,54 +247,54 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 10,
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Top Brands",
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey[400],
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "View all",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: kPrimaryColor,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 12,
-                                    color: kPrimaryColor,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: 150,
-                          margin: EdgeInsets.only(bottom: 16),
-                          child: ListView(
-                            physics: BouncingScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            children: buildDealers(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 6,
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.all(16),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //         "Top Brands",
+                        //         style: TextStyle(
+                        //           fontSize: 20,
+                        //           fontWeight: FontWeight.bold,
+                        //           color: Colors.grey[400],
+                        //         ),
+                        //       ),
+                        //       Row(
+                        //         children: [
+                        //           Text(
+                        //             "View all",
+                        //             style: TextStyle(
+                        //               fontSize: 15,
+                        //               fontWeight: FontWeight.bold,
+                        //               color: kPrimaryColor,
+                        //             ),
+                        //           ),
+                        //           SizedBox(
+                        //             width: 8,
+                        //           ),
+                        //           Icon(
+                        //             Icons.arrow_forward_ios,
+                        //             size: 12,
+                        //             color: kPrimaryColor,
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Container(
+                        //   height: 150,
+                        //   margin: EdgeInsets.only(bottom: 16),
+                        //   child: ListView(
+                        //     physics: BouncingScrollPhysics(),
+                        //     scrollDirection: Axis.horizontal,
+                        //     children: buildDealers(),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 6,
+                        // ),
                       ],
                     ),
                   ),
@@ -308,13 +307,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> buildDealers() {
-    List<Widget> list = [];
-    for (var i = 0; i < dealers.length; i++) {
-      list.add(buildDealer(dealers[i], i));
-    }
-    return list;
-  }
+  // List<Widget> buildDealers() {
+  //   List<Widget> list = [];
+  //   for (var i = 0; i < dealers.length; i++) {
+  //     list.add(buildDealer(dealers[i], i));
+  //   }
+  //   return list;
+  // }
 
   List<Widget> buildDeals() {
     List<Widget> list = [];

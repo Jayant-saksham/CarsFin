@@ -22,7 +22,6 @@ class _NamePageState extends State<NamePage> {
   File userImage;
   String filePath;
 
-
   void captureWithCamera() async {
     Navigator.pop(context);
     PickedFile pickedFile =
@@ -168,7 +167,9 @@ class _NamePageState extends State<NamePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BottomNavScreen(),
+                          builder: (context) => BottomNavScreen(
+                            phoneNumber: user.phoneNumber,
+                          ),
                         ),
                       );
                     },

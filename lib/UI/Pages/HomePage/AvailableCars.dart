@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'BookCar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:Cars/UI/Widgets/circularProgress.dart';
+import 'package:Cars/UI/Pages/Login/Login.dart';
 
 var carReference = FirebaseFirestore.instance.collection("Cars");
 
@@ -71,9 +72,15 @@ class _AvailableCarsState extends State<AvailableCars> {
             ),
             onPressed: () {},
           ),
-          leading: Icon(
-            Icons.drive_eta,
+          leading: IconButton(
+            icon: Icon(Icons.drive_eta),
             color: Colors.black,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            },
           ),
         ),
         backgroundColor: HexColor('#F8FAFB'),
