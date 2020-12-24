@@ -84,7 +84,7 @@ class FirebaseFunctions {
         "Dealer Email": car.sellerEmail,
         "Is Approved": false,
         "Date of Purchased": car.dateofPurchased,
-        "Milage": "34kmpl",
+        "Milage": car.milage,
         "Car Location": car.location,
         "Seats": 4,
         "Other Features": car.otherFeatures,

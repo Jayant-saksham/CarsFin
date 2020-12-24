@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'SellCar2.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SellCar extends StatefulWidget {
   @override
@@ -29,6 +30,18 @@ class _SellCarState extends State<SellCar> {
                   "Enter the details of your Car",
                   style: TextStyle(fontSize: 16, color: Colors.grey),
                 ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  "All fields are compulsary",
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                ),
+              ),
+              SizedBox(
+                height: 60,
               ),
               SizedBox(
                 height: 60,
@@ -92,7 +105,22 @@ class _SellCarState extends State<SellCar> {
                 child: MaterialButton(
                   color: Colors.indigo,
                   onPressed: () {
-                    Navigator.push(
+                    if (carbrand == null ||
+                        carNum == null ||
+                        dmDriven == null ||
+                        modelNumber == null) {
+                      Fluttertoast.showToast(
+                        msg: "All Fields are compulsary",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
+                    else{
+                      Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => SellCar2(
@@ -103,6 +131,7 @@ class _SellCarState extends State<SellCar> {
                         ),
                       ),
                     );
+                    }
                   },
                   child: Text(
                     "Next",

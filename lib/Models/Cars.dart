@@ -7,7 +7,7 @@ class Car {
   String price;
   String condition;
   String description;
-  List  images;
+  List images;
   String location;
   String dealerName;
   String dealerPhoneNumber;
@@ -17,16 +17,18 @@ class Car {
   int seats;
   String milage;
   bool isAvailable = true;
-  bool hasRC;
-  bool hasInsurance;
-  bool hasPollution;
+  bool hasRC = false;
+  bool hasInsurance = false;
+  bool hasPollution = false;
   String otherFeatures;
   String dateofPurchased;
   bool isApproved;
+  List<String> imageUrl;
   Car({
+    this.images,
+    this.imageUrl,
     @required this.brand,
     @required this.price,
-    @required this.images,
     @required this.dealerName,
     @required this.dealerPhoneNumber,
     @required this.kmDriven,
@@ -35,6 +37,7 @@ class Car {
     @required this.hasInsurance,
     @required this.hasPollution,
     @required this.isApproved,
+    this.hasRC,
     this.condition,
     this.description,
     this.location,

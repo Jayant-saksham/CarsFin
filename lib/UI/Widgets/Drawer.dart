@@ -3,8 +3,12 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:Cars/backend/FirebaseAuth.dart';
+import 'package:Cars/UI/Pages/Login/Login.dart';
+import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
+import 'package:Cars/UI/Pages/SellCar/SellCar.dart';
 
-Widget myDrawer(String userName, String phoneNumber, String userImage) {
+Widget myDrawer(
+    String userName, String phoneNumber, String userImage, context) {
   return Drawer(
     child: ListView(
       children: <Widget>[
@@ -13,11 +17,11 @@ Widget myDrawer(String userName, String phoneNumber, String userImage) {
             color: kPrimaryColor,
           ),
           accountEmail: Text(
-                  "${phoneNumber}",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
+            "${phoneNumber}",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
           accountName: Text(
             "${userName}",
             style: TextStyle(
@@ -27,7 +31,9 @@ Widget myDrawer(String userName, String phoneNumber, String userImage) {
           currentAccountPicture: ClipRRect(
             borderRadius: BorderRadius.circular(70),
             child: Image(
-              image: userImage == null ? NetworkImage('') : NetworkImage(userImage),
+              image: userImage == null
+                  ? NetworkImage('')
+                  : NetworkImage(userImage),
               width: 70,
               height: 70,
               fit: BoxFit.cover,
@@ -48,6 +54,22 @@ Widget myDrawer(String userName, String phoneNumber, String userImage) {
         ListTile(
           title: Text("Cars"),
           leading: Icon(EvaIcons.hardDrive),
+        ),
+        SizedBox(height: 10),
+        ListTile(
+          title: Text("Admin"),
+          leading: Icon(EvaIcons.activity),
+          onTap: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  Login();
+                },
+              ),
+            );
+          },
         ),
         SizedBox(height: 10),
         SizedBox(height: 20),

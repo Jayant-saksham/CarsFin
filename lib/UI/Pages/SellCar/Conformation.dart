@@ -56,6 +56,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     super.initState();
     setState(() {
       car = Car(
+        hasRC: widget.hasRC,
         brand: widget.carBrand,
         dealerName: widget.name,
         dealerPhoneNumber: widget.phoneNumber,
@@ -70,7 +71,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         carNumber: widget.carNumber,
         dateofPurchased: "",
         location: widget.location,
-        milage: "0",
+        milage: widget.milage,
         sellerEmail: widget.email,
         seats: widget.seats.toString().length > 0 ? widget.seats : 0,
       );
@@ -118,8 +119,8 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
             alignment: Alignment.bottomCenter,
             child: MaterialButton(
               color: Colors.indigo,
-              onPressed: () {
-                FirebaseFunctions().createCarRecord(car);
+              onPressed: () async {
+                await FirebaseFunctions().createCarRecord(car);
                 Navigator.push(
                   context,
                   MaterialPageRoute(

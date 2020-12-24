@@ -5,33 +5,41 @@ import 'package:Cars/UI/Pages/HomePage/AvailableCars.dart';
 import 'package:Cars/UI/Pages/HomePage/HomePage.dart';
 import 'package:Cars/UI/Pages/UserProfile/UserProfile.dart';
 import 'package:Cars/UI/Pages/NotificationPage/NotificationPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+var userReference = FirebaseFirestore.instance.collection("Users");
 
 class BottomNavScreen extends StatefulWidget {
   String phoneNumber;
+
   BottomNavScreen({this.phoneNumber});
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
+  String userName;
+  String image = "NULL";
   PageController pageController;
   int _currentIndex = 0;
   var user;
-  getCurrentUser() async {
-    await FirebaseFunctions().getUser(widget.phoneNumber).then((value) {
-      setState(() {
-        user = value;
-      });
+  getCurrentUser(String phoneNumber) async {
+    String phoneNumbe =
+        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
+    print(phoneNumbe);
+    final DocumentSnapshot documentSnapshot =
+        await userReference.doc(phoneNumber).get();
+    setState(() {
+      userName = documentSnapshot.data()["userName"];
+      image = documentSnapshot.data()["Image"];
     });
-
-    print(user);
   }
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
-    getCurrentUser();
+    getCurrentUser(widget.phoneNumber);
   }
 
   @override
@@ -51,7 +59,11 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           });
         },
         children: [
-          HomePage(),
+          HomePage(
+            phoneNumber: widget.phoneNumber,
+            userName: userName,
+            userPhoto: image == 'NULL'? "":image,
+          ),
           AvailableCars(),
           SellCar(),
           NotificationPage(),

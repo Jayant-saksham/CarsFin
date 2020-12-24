@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'SellCar4.dart';
 import 'package:Cars/Services/ValidatingServices.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SellCar3 extends StatefulWidget {
   String carNumber;
@@ -55,19 +56,7 @@ class _SellCar3State extends State<SellCar3> {
   var _choosenDate = null;
   bool isDateChosen = false;
   bool isError = false;
-  @override
-  void initState() {
-    super.initState();
-    print(widget.carBrand);
-    print(widget.carNumber);
-    print(widget.hasCarRC);
-    print(widget.date);
-    print(widget.kmDriven);
-    print(widget.modelNumber);
-    print(widget.hasCarRC);
-    print(widget.hasInsurance);
-    print(widget.hasPollution);
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +139,19 @@ class _SellCar3State extends State<SellCar3> {
               child: MaterialButton(
                 color: Colors.indigo,
                 onPressed: () {
-                  Navigator.push(
+                  if(dealerName == null || dealerContact == null || dealerEmail == null){
+                    Fluttertoast.showToast(
+                        msg: "All Fields are compulsary",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.black,
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                  }
+                  else{
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => SellCar4(
@@ -171,6 +172,7 @@ class _SellCar3State extends State<SellCar3> {
                       ),
                     ),
                   );
+                  }
                 },
                 child: Text(
                   "Next",

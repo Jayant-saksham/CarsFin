@@ -13,15 +13,18 @@ import 'CarBoxBig.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'CarBoxShort.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+var carReference = FirebaseFirestore.instance.collection("Cars");
+
 
 class HomePage extends StatefulWidget {
-  // String userName;
+  String userName;
   String phoneNumber;
-  // String userPhoto;
+  String userPhoto;
   HomePage({
-    // this.userName,
+    this.userName,
     this.phoneNumber,
-    // this.userPhoto,
+    this.userPhoto,
   });
   @override
   _HomePageState createState() => _HomePageState();
@@ -33,7 +36,47 @@ class _HomePageState extends State<HomePage> {
   // String get userImage => widget.userPhoto;
   List<Dealer> dealers = getDealerList();
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
-  List<Car> cars = getCars();
+  List<Car> cars = [];
+  List allCars = [];
+  int carsLength = 0;
+
+  getAllCars() async {
+    carReference.get().then((snapshot) {
+      snapshot.docs.forEach((element) {
+        setState(() {
+          if (element.data()["Is Approved"]) {
+            Car newCar = Car(
+              brand: element.data()["Car brand"],
+              dealerName: element.data()["Dealer Name"],
+              dealerPhoneNumber: element.data()["Dealer PhoneNumber"],
+              hasInsurance: element.data()["Has Insurance"],
+              hasPollution: element.data()["Has Pollution"],
+              images: element.data()["Images"],
+              isApproved: element.data()["Is Approved"],
+              isAvailable: true,
+              kmDriven: element.data()["KM Driven"],
+              model: element.data()["Car Model"],
+              price: element.data()["Price"],
+              carNumber: element.data()["Car Number"],
+              milage: element.data()["Milage"],
+              seats: element.data()["Seats"],
+              location: element.data()["Location"],
+              sellerEmail: element.data()["Dealer Email"],
+            );
+            cars.add(newCar);
+            carsLength++;
+          }
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getAllCars();
+    print(carsLength);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +92,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: myDrawer(
-          "",
-          phoneNumber.toString(),
-          // userImage,
-          ''),
+        widget.userName,
+        phoneNumber.toString(),
+        '',
+        context,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(2.0),
         child: Container(

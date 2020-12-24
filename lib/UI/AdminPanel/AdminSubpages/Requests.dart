@@ -161,15 +161,22 @@ class _RequestsState extends State<Requests> {
   }
 
   approveCar(carNumber) async {
+    int approvedCars;
     var response = await FirebaseFirestore.instance;
     response.collection("Cars").doc(carNumber).update(
       {
         "Is Approved": true,
       },
     );
+    response.collection("Admin").doc("Admin").get().then((value) {
+      setState(() {
+        approvedCars = value.data()["Cars Approved"];
+        print(approvedCars);
+      });
+    });
     response.collection("Admin").doc("Admin").update(
       {
-        "Cars Approved": FieldValue.increment(1),
+        "Cars Approved": approvedCars,
       },
     );
   }

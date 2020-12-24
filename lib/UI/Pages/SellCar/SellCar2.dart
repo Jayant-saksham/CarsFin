@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'SellCar3.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 class SellCar2 extends StatefulWidget {
   String carNumber;
   String kmDriven;
@@ -31,7 +31,7 @@ class _SellCar2State extends State<SellCar2> {
   String boughtDat;
   String ownerShip;
   bool ownserShipSelected = false;
-  bool carRC;
+  bool carRC = false;
   bool rcSelected = false;
   String _choosenDate;
   bool isDateChosen = false;
@@ -139,23 +139,40 @@ class _SellCar2State extends State<SellCar2> {
               child: MaterialButton(
                 color: Colors.indigo,
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SellCar3(
-                        carBrand: widget.carBrand,
-                        carNumber: widget.carNumber,
-                        date: _choosenDate,
-                        hasCarRC: carRC,
-                        hasInsurance: hasInsuranc,
-                        hasPollution: hasPollutio,
-                        kmDriven: kmDriven,
-                        modelNumber: modelNumber,
-                        price: carPrice,
-                        ownerShip: ownerShip,
+                  if (ownerShip == null ||
+                      _choosenDate == null ||
+                      carRC == null ||
+                      hasPollutio == null ||
+                      hasInsuranc == null ||
+                      carPrice == null) {
+                    Fluttertoast.showToast(
+                      msg: "All Fields are compulsary",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SellCar3(
+                          carBrand: widget.carBrand,
+                          carNumber: widget.carNumber,
+                          date: _choosenDate,
+                          hasCarRC: carRC,
+                          hasInsurance: hasInsuranc,
+                          hasPollution: hasPollutio,
+                          kmDriven: kmDriven,
+                          modelNumber: modelNumber,
+                          price: carPrice,
+                          ownerShip: ownerShip,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: Text(
                   "Next",
@@ -256,7 +273,9 @@ class _SellCar2State extends State<SellCar2> {
             SizedBox(
               width: 10,
             ),
-            Icon(Icons.date_range),
+            Icon(
+              Icons.file_copy,
+            ),
             SizedBox(
               width: 10,
             ),
@@ -360,7 +379,7 @@ class _SellCar2State extends State<SellCar2> {
             SizedBox(
               width: 10,
             ),
-            Icon(Icons.date_range),
+            Icon(Icons.file_copy),
             SizedBox(
               width: 10,
             ),
@@ -465,7 +484,7 @@ class _SellCar2State extends State<SellCar2> {
             SizedBox(
               width: 10,
             ),
-            Icon(Icons.date_range),
+            Icon(Icons.file_copy),
             SizedBox(
               width: 10,
             ),
@@ -601,13 +620,16 @@ class _SellCar2State extends State<SellCar2> {
             SizedBox(
               width: 10,
             ),
-            Icon(Icons.date_range),
+            Icon(Icons.supervised_user_circle),
             SizedBox(
               width: 10,
             ),
             Text(
               !ownserShipSelected ? "Choose your Ownership" : ownerShip,
-              style: TextStyle(color: Colors.grey[700], fontSize: 16),
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 16,
+              ),
             )
           ],
         ),
@@ -691,6 +713,7 @@ class _SellCar2State extends State<SellCar2> {
 
   Widget price() {
     return TextFormField(
+      keyboardType: TextInputType.number,
       decoration: InputDecoration(
         hintText: "Enter extimate price in ₹",
         prefixIcon: Icon(Icons.money),

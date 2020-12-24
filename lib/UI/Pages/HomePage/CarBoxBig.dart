@@ -6,7 +6,7 @@ Widget carAdLong(Car car, context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
-      height: 295,
+      height: 360,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -21,7 +21,10 @@ Widget carAdLong(Car car, context) {
                 children: [
                   Text(
                     "₹ " + car.price,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                    ),
                   ),
                 ],
               ),
@@ -55,7 +58,9 @@ Widget carAdLong(Car car, context) {
                           child: Center(
                             child: Text(
                               "Pollution",
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         )

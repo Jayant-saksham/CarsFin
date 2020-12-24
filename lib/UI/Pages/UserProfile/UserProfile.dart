@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'Clipper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+var userReference = FirebaseFirestore.instance.collection("Users");
 
 class Profile extends StatefulWidget {
   @override
@@ -7,6 +11,22 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  String userName;
+  Future getUser(String phoneNumber) async {
+    String phoneNumbe =
+        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
+    print(phoneNumbe);
+    final DocumentSnapshot documentSnapshot =
+        await userReference.doc(phoneNumbe).get();
+    print(documentSnapshot.data());
+  }
+
+  @override
+  void initState() {
+    // getUser(FirebaseAuth.instance.currentUser.phoneNumber);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,17 +64,17 @@ class _ProfileState extends State<Profile> {
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
                 //   children: [
-                    // Icon(Icons.location_on),
-                    // SizedBox(
-                    //   width: 5,
-                    // ),
-                    // Text(
-                    //   'Burari, Delhi, India',
-                    //   style: TextStyle(
-                    //     fontSize: 17.0,
-                    //     fontStyle: FontStyle.italic,
-                    //   ),
-                    // ),
+                // Icon(Icons.location_on),
+                // SizedBox(
+                //   width: 5,
+                // ),
+                // Text(
+                //   'Burari, Delhi, India',
+                //   style: TextStyle(
+                //     fontSize: 17.0,
+                //     fontStyle: FontStyle.italic,
+                //   ),
+                // ),
                 //   ],
                 // ),
                 // SizedBox(height: 25.0),

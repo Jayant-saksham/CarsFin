@@ -4,7 +4,7 @@ import 'package:Cars/Themes/constants.dart';
 
 Widget buildCar(Car car, int index) {
   return SingleChildScrollView(
-      child: Container(
+    child: Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(
@@ -55,7 +55,7 @@ Widget buildCar(Car car, int index) {
             child: Center(
               child: Hero(
                 tag: car.model,
-                child: Image.asset(
+                child: Image.network(
                   car.images[0],
                   fit: BoxFit.fitWidth,
                 ),
@@ -84,23 +84,7 @@ Widget buildCar(Car car, int index) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "per " +
-                    (car.condition == "Daily"
-                        ? "day"
-                        : car.condition == "Weekly"
-                            ? "week"
-                            : "month"),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                "₹ " +
-                    car.price.substring(0, car.price.length - 4) +
-                    "." +
-                    car.price.substring(car.price.length - 3, car.price.length) +
-                    "k",
+                "₹ " + car.price.toString(),
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

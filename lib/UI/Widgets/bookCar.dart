@@ -164,15 +164,15 @@ class _BookCarState extends State<BookCar> {
                                 _currentImage = page;
                               });
                             },
-                            children: widget.car.images.map((path) {
+                            children: widget.car.images.map((image) {
                               return Container(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 16,
                                 ),
                                 child: Hero(
                                   tag: widget.car.model,
-                                  child: Image.asset(
-                                    path,
+                                  child: Image.network(
+                                    image.toString(),
                                     fit: BoxFit.scaleDown,
                                   ),
                                 ),
@@ -300,7 +300,7 @@ class _BookCarState extends State<BookCar> {
                 Row(
                   children: [
                     Text(
-                      "₹ " + price,
+                      "₹ " + widget.car.price,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -365,7 +365,7 @@ class _BookCarState extends State<BookCar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                months + " Month",
+                months,
                 style: TextStyle(
                   color: selected ? Colors.white : Colors.black,
                   fontSize: 14,

@@ -14,30 +14,31 @@ class SellCar4 extends StatefulWidget {
   String carBrand;
   String modelNumber;
   bool hasInsuranc;
+  bool hasPollutio;
   bool hasCarRC;
   String ownerShip;
-  bool hasPollutio;
   String name;
   String date;
   String email;
   String location;
   String phoneNumber;
   String price;
-  SellCar4(
-      {this.carBrand,
-      this.carNumber,
-      this.hasCarRC,
-      this.hasInsuranc,
-      this.hasPollutio,
-      this.kmDriven,
-      this.modelNumber,
-      this.email,
-      this.location,
-      this.name,
-      this.phoneNumber,
-      this.price,
-      this.date,
-      this.ownerShip});
+  SellCar4({
+    this.carBrand,
+    this.carNumber,
+    this.hasCarRC,
+    this.hasInsuranc,
+    this.hasPollutio,
+    this.kmDriven,
+    this.modelNumber,
+    this.email,
+    this.location,
+    this.name,
+    this.phoneNumber,
+    this.price,
+    this.date,
+    this.ownerShip,
+  });
   @override
   _SellCar4State createState() => _SellCar4State();
 }
@@ -45,8 +46,10 @@ class SellCar4 extends StatefulWidget {
 class _SellCar4State extends State<SellCar4> {
   String price;
   String date;
+  String milage;
   List<Asset> images = List<Asset>();
   String _error = 'No Error Dectected';
+
   Widget buildGridView() {
     return GridView.count(
       crossAxisCount: 3,
@@ -105,6 +108,7 @@ class _SellCar4State extends State<SellCar4> {
 
   bool isDateChosen = false;
   bool isError = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,7 +175,22 @@ class _SellCar4State extends State<SellCar4> {
                 right: 30,
                 top: 10,
               ),
-              // child: hasInsurance(),
+              child: images.length > 0
+                  ? Container(
+                      child: SingleChildScrollView(
+                        child: ListView(
+                          children: images.map((image) {
+                            ListTile(
+                              leading: Image.asset(image.toString()),
+                              title: Text("Hello"),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      color: Colors.amber,
+                    ),
             ),
             SizedBox(
               height: 10,
@@ -182,7 +201,7 @@ class _SellCar4State extends State<SellCar4> {
                 right: 30,
                 top: 10,
               ),
-              // child: hasPollution(),
+              child: enterMilage(),
             ),
             SizedBox(
               height: 10,
@@ -222,6 +241,7 @@ class _SellCar4State extends State<SellCar4> {
                         price: widget.price,
                         email: widget.email,
                         ownerShip: widget.ownerShip,
+                        milage: milage,
                       ),
                     ),
                   );
@@ -238,6 +258,24 @@ class _SellCar4State extends State<SellCar4> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget enterMilage() {
+    return TextFormField(
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        hintText: "Enter milage in kmpl",
+        prefixIcon: Icon(Icons.speed),
+        border: OutlineInputBorder(),
+      ),
+      onChanged: (value) {
+        setState(
+          () {
+            milage = value;
+          },
+        );
+      },
     );
   }
 }

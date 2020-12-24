@@ -1,13 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:Cars/backend/FirebaseBackend.dart';
 
-String password = "Gmail.com@12345";
-String gmail = "tstakkar@gmail.com";
-String inputPasswrod;
-String inputEmail;
 bool isExist;
 
 class UserLogin extends StatefulWidget {
@@ -93,14 +90,20 @@ class _UserLoginState extends State<UserLogin> {
                   ),
                   child: InkWell(
                     onTap: () {
-                      FirebaseFunctions()
-                          .checkIfUserExist(phoneNo)
-                          .then((value) {
-                        setState(() {
-                          isExist = value;
-                        });
-                      });
-                      print(isExist);
+                      Future checkIfUserExist(String phoneNumber) async {
+                        String phoneNumbe = phoneNumber.substring(0, 3) +
+                            " " +
+                            phoneNumber.substring(3, 13);
+                        final DocumentSnapshot documentSnapshot =
+                            await userReference.doc(phoneNumbe).get();
+                        print(documentSnapshot.data());
+                        if (documentSnapshot.exists) {
+                          return true;
+                        } else {
+                          return false;
+                        }
+                      }
+
                       if (isExist) {
                         Fluttertoast.showToast(
                           msg: "User exist",
@@ -127,7 +130,9 @@ class _UserLoginState extends State<UserLogin> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15),
+                        ),
                         color: Colors.amber[600],
                       ),
                       height: 36,
@@ -136,7 +141,9 @@ class _UserLoginState extends State<UserLogin> {
                         child: Text(
                           "Login",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -150,7 +157,10 @@ class _UserLoginState extends State<UserLogin> {
                   children: [
                     Text(
                       "Don't have an account ?",
-                      style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        fontSize: 16,
+                      ),
                     ),
                     InkWell(
                       onTap: () {
@@ -180,9 +190,10 @@ class _UserLoginState extends State<UserLogin> {
       keyboardType: TextInputType.text,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-          icon: Icon(Icons.lock),
-          labelText: 'OTP',
-          border: OutlineInputBorder()),
+        icon: Icon(Icons.lock),
+        labelText: 'OTP',
+        border: OutlineInputBorder(),
+      ),
       validator: (value) {
         if (value.isEmpty) {
           return 'Number is required';
