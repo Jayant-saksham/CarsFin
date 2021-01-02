@@ -120,29 +120,15 @@ class FirebaseFunctions {
     }
   }
 
-  Future getUser(String phoneNumber) async {
-    String phoneNumbe =
-        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
-    print(phoneNumbe);
-    final DocumentSnapshot documentSnapshot =
-        await userReference.doc(phoneNumbe).get();
-  }
-
-  Future getAgency(String phoneNumber) async {
-    final DocumentSnapshot documentSnapshot =
-        await agencyReference.doc(phoneNumber).get();
-    return documentSnapshot.data();
-  }
-
-  Future<bool> checkIfUserExist(String phoneNumber) async {
-    String phoneNumbe =
-        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
-    final DocumentSnapshot documentSnapshot =
-        await userReference.doc(phoneNumbe).get();
-    if (documentSnapshot.exists) {
-      return true;
-    } else {
-      return false;
-    }
+  Future<void> bookCar(
+      Car car, String email, String phoneNumber, String name) async {
+    var response = FirebaseFirestore.instance
+        .collection("Bookings")
+        .doc(car.carNumber)
+        .set({
+      "Car Number": car.carNumber,
+      "Name": name,
+      "Phone Number": phoneNumber,
+    });
   }
 }

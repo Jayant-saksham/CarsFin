@@ -3,6 +3,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import '../AdminSubpages/Requests.dart';
 import '../AdminSubpages/Users.dart';
+import '../AdminSubpages/Cars.dart';
 
 String imageUrl =
     'https://scontent.fdel5-1.fna.fbcdn.net/v/t1.0-9/480128_4549413205633_620077564_n.jpg?_nc_cat=110&ccb=2&_nc_sid=de6eea&_nc_ohc=g2eXmmK70kAAX8F5J6A&_nc_ht=scontent.fdel5-1.fna&oh=193ce9613936ce743efebab7d0b200e5&oe=60013BFF';
@@ -63,6 +64,12 @@ Widget myDrawer(context) {
         ListTile(
           title: Text("Cars"),
           leading: Icon(EvaIcons.hardDrive),
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AllCars(),
+            ),
+          ),
         ),
         SizedBox(height: 10),
         SizedBox(height: 20),

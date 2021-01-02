@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
               seats: element.data()["Seats"],
               location: element.data()["Location"],
               sellerEmail: element.data()["Dealer Email"],
+              hasRC: element.data()["Has RC"],
             );
             cars.add(newCar);
             carsLength++;
@@ -80,7 +81,10 @@ class _HomePageState extends State<HomePage> {
         title: "CarsFin",
         isLeading: true,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.black),
+          icon: Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
           onPressed: () => drawerKey.currentState.openDrawer(),
         ),
       ),
@@ -327,8 +331,8 @@ class _HomePageState extends State<HomePage> {
     for (var i = 0; i < cars.length; i++) {
       list.add(
         GestureDetector(
-          onTap: () async {
-            await Navigator.push(
+          onTap: () {
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => BookCar(

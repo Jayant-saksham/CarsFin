@@ -5,8 +5,6 @@ import 'package:Cars/UI/Widgets/circularProgress.dart';
 
 var userReference = FirebaseFirestore.instance.collection("Users");
 var carReference = FirebaseFirestore.instance.collection("Cars");
-var agencyReference = FirebaseFirestore.instance.collection("Agency");
-var adminReference = FirebaseFirestore.instance.collection("Admin");
 
 class Requests extends StatefulWidget {
   @override
@@ -17,13 +15,15 @@ class _RequestsState extends State<Requests> {
   @override
   List cars = [];
   getAllCars() async {
-    carReference.get().then((snapshot) {
-      snapshot.docs.forEach((element) {
-        setState(() {
-          cars.add(element.data());
+    carReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach((element) {
+          setState(() {
+            cars.add(element.data());
+          });
         });
-      });
-    });
+      },
+    );
   }
 
   void initState() {
@@ -75,7 +75,7 @@ class _RequestsState extends State<Requests> {
                             : Text(""),
                         c['Has RC']
                             ? Text(
-                                "I",
+                                "R",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.indigo),
@@ -85,8 +85,9 @@ class _RequestsState extends State<Requests> {
                             ? Text(
                                 "P",
                                 style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.indigo),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.indigo,
+                                ),
                               )
                             : Text(""),
                       ],
@@ -171,7 +172,6 @@ class _RequestsState extends State<Requests> {
     response.collection("Admin").doc("Admin").get().then((value) {
       setState(() {
         approvedCars = value.data()["Cars Approved"];
-        print(approvedCars);
       });
     });
     response.collection("Admin").doc("Admin").update(

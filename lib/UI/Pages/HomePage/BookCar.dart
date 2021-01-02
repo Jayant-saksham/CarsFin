@@ -1,6 +1,7 @@
 import 'package:Cars/Models/Cars.dart';
 import 'package:Cars/Themes/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:Cars/UI/Pages/BookThisCar/BookThisCar.dart';
 
 class BookCar extends StatefulWidget {
   final Car car;
@@ -60,39 +61,41 @@ class _BookCarState extends State<BookCar> {
                                 Navigator.pop(context);
                               },
                               child: Container(
-                                  width: 45,
-                                  height: 45,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(15),
-                                    ),
-                                    border: Border.all(
-                                      color: Colors.grey[300],
-                                      width: 1,
-                                    ),
+                                width: 45,
+                                height: 45,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(15),
                                   ),
-                                  child: Icon(
-                                    Icons.keyboard_arrow_left,
-                                    color: Colors.black,
-                                    size: 28,
-                                  )),
+                                  border: Border.all(
+                                    color: Colors.grey[300],
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Icon(
+                                  Icons.keyboard_arrow_left,
+                                  color: Colors.black,
+                                  size: 28,
+                                ),
+                              ),
                             ),
                             Row(
                               children: [
                                 Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
                                     ),
-                                    child: Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
-                                      size: 22,
-                                    )),
+                                  ),
+                                  child: Icon(
+                                    Icons.bookmark_border,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 16,
                                 ),
@@ -322,74 +325,39 @@ class _BookCarState extends State<BookCar> {
                 ),
               ],
             ),
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BookThisCar(
+                              car: widget.car,
+                            )));
+              },
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  child: Text(
-                    "Book this car",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      "Book this car",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildPricePerPeriod(String months, String price, bool selected) {
-    return SafeArea(
-      child: Expanded(
-        child: Container(
-          height: MediaQuery.of(context).size.height * 0.15,
-          padding: EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: selected ? kPrimaryColor : Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-            border: Border.all(
-              color: Colors.grey[300],
-              width: selected ? 0 : 1,
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                months + " Month",
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              Text(
-                price,
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
