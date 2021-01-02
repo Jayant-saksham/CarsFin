@@ -97,22 +97,23 @@ class _BookCarState extends State<BookCar> {
                                   width: 16,
                                 ),
                                 Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.grey[300],
-                                        width: 1,
-                                      ),
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
                                     ),
-                                    child: Icon(
-                                      Icons.share,
-                                      color: Colors.black,
-                                      size: 22,
-                                    )),
+                                    border: Border.all(
+                                      color: Colors.grey[300],
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.share,
+                                    color: Colors.black,
+                                    size: 22,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -164,7 +165,7 @@ class _BookCarState extends State<BookCar> {
                                 ),
                                 child: Hero(
                                   tag: widget.car.model,
-                                  child: Image.asset(
+                                  child: Image.network(
                                     path,
                                     fit: BoxFit.scaleDown,
                                   ),
@@ -184,35 +185,35 @@ class _BookCarState extends State<BookCar> {
                               ),
                             )
                           : Container(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            buildPricePerPeriod(
-                              "12",
-                              "4.350",
-                              true,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            buildPricePerPeriod(
-                              "6",
-                              "4.800",
-                              false,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            buildPricePerPeriod(
-                              "1",
-                              "5.100",
-                              false,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: 14),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       buildPricePerPeriod(
+                      //         "12",
+                      //         "4.350",
+                      //         true,
+                      //       ),
+                      //       SizedBox(
+                      //         width: 16,
+                      //       ),
+                      //       buildPricePerPeriod(
+                      //         "6",
+                      //         "4.800",
+                      //         false,
+                      //       ),
+                      //       SizedBox(
+                      //         width: 16,
+                      //       ),
+                      //       buildPricePerPeriod(
+                      //         "1",
+                      //         "5.100",
+                      //         false,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -254,12 +255,22 @@ class _BookCarState extends State<BookCar> {
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         children: [
-                          buildSpecificationCar("Color", "White"),
-                          buildSpecificationCar("Gearbox", "Automatic"),
-                          buildSpecificationCar("Seat", "4"),
-                          buildSpecificationCar("Motor", "v10 2.0"),
-                          buildSpecificationCar("Speed (0-100)", "3.2 sec"),
-                          buildSpecificationCar("Top Speed", "121 mph"),
+                          buildSpecificationCar("Milage", widget.car.milage),
+                          buildSpecificationCar(
+                              "KM Driven", widget.car.kmDriven),
+                          widget.car.hasInsurance
+                              ? buildSpecificationCar("Insurance", "Yes")
+                              : Text(""),
+                          widget.car.hasRC
+                              ? buildSpecificationCar("RC", "Yes")
+                              : Text(""),
+                          widget.car.hasPollution
+                              ? buildSpecificationCar("Pollution", "Yes")
+                              : Text(""),
+                          widget.car.ownerShip == null
+                              ? Text("")
+                              : buildSpecificationCar(
+                                  "Ownership", widget.car.ownerShip)
                         ],
                       ),
                     ),
@@ -284,7 +295,7 @@ class _BookCarState extends State<BookCar> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "12 Month",
+                  "Car Price",
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -297,7 +308,7 @@ class _BookCarState extends State<BookCar> {
                 Row(
                   children: [
                     Text(
-                      "₹ 4,350",
+                      "₹ " + widget.car.price,
                       style: TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -306,13 +317,6 @@ class _BookCarState extends State<BookCar> {
                     ),
                     SizedBox(
                       width: 8,
-                    ),
-                    Text(
-                      "per month",
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
                     ),
                   ],
                 ),
@@ -382,13 +386,6 @@ class _BookCarState extends State<BookCar> {
                   color: selected ? Colors.white : Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "USD",
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black,
-                  fontSize: 14,
                 ),
               ),
             ],

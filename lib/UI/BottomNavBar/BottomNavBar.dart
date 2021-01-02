@@ -11,15 +11,16 @@ var userReference = FirebaseFirestore.instance.collection("Users");
 
 class BottomNavScreen extends StatefulWidget {
   String phoneNumber;
+  String name;
 
-  BottomNavScreen({this.phoneNumber});
+  BottomNavScreen({this.phoneNumber, this.name});
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();
 }
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   String userName;
-  String image = "NULL";
+  String image;
   PageController pageController;
   int _currentIndex = 0;
   var user;
@@ -29,6 +30,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
     print(phoneNumbe);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumber).get();
+    print(documentSnapshot.data());
     setState(() {
       userName = documentSnapshot.data()["userName"];
       image = documentSnapshot.data()["Image"];
@@ -62,7 +64,7 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
           HomePage(
             phoneNumber: widget.phoneNumber,
             userName: userName,
-            userPhoto: image == 'NULL'? "":image,
+            userPhoto: image,
           ),
           AvailableCars(),
           SellCar(),

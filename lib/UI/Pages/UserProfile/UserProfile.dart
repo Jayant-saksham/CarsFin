@@ -12,6 +12,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String userName;
+  String imageUrl;
   Future getUser() async {
     String phoneNumber = await FirebaseAuth.instance.currentUser.phoneNumber;
     print(phoneNumber);
@@ -22,6 +23,7 @@ class _ProfileState extends State<Profile> {
         await userReference.doc(phoneNumbe).get();
     setState(() {
       userName = documentSnapshot.data()['userName'];
+      imageUrl = documentSnapshot.data()["Image"];
     });
   }
 
@@ -37,7 +39,9 @@ class _ProfileState extends State<Profile> {
       body: new Stack(
         children: <Widget>[
           ClipPath(
-            child: Container(color: Colors.black.withOpacity(0.8)),
+            child: Container(
+              color: Colors.black.withOpacity(0.8),
+            ),
             clipper: getClipper(),
           ),
           Positioned(
@@ -49,7 +53,7 @@ class _ProfileState extends State<Profile> {
                   borderRadius: BorderRadius.circular(130),
                   child: Image(
                     image: NetworkImage(
-                      'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg',
+                      imageUrl==null?"":imageUrl,
                     ),
                     width: 200,
                     height: 200,
@@ -58,7 +62,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 SizedBox(height: 90.0),
                 Text(
-                  userName==null?"User":userName,
+                  userName == null ? "User" : userName,
                   style: TextStyle(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold,

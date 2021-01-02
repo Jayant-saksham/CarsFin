@@ -1,19 +1,14 @@
-import 'dart:io';
 import 'package:Cars/Models/Cars.dart';
-import 'package:Cars/Models/Users.dart';
 import 'package:Cars/Themes/constants.dart';
 import 'package:Cars/UI/Widgets/Drawer.dart';
-import 'package:Cars/backend/FirebaseBackend.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:Cars/Models/Dealers.dart';
-import 'DealerWidget.dart';
-import 'BookCar.dart';
+import 'AvailableCars.dart';
 import 'CarBoxBig.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'CarBoxShort.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'BookCar.dart';
 
 var carReference = FirebaseFirestore.instance.collection("Cars");
 
@@ -31,7 +26,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // String get userName => widget.userName;
+  String get userName => widget.userName;
   String get phoneNumber => widget.phoneNumber;
   // String get userImage => widget.userPhoto;
   GlobalKey<ScaffoldState> drawerKey = GlobalKey();
@@ -39,7 +34,7 @@ class _HomePageState extends State<HomePage> {
   List allCars = [];
   int carsLength = 0;
 
-  getAllCars() async {
+  void getAllCars() async {
     carReference.get().then((snapshot) {
       snapshot.docs.forEach((element) {
         setState(() {
@@ -73,7 +68,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     getAllCars();
-    print(carsLength);
     super.initState();
   }
 
@@ -91,9 +85,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: myDrawer(
-        widget.userName,
+        userName,
         phoneNumber.toString(),
-        '',
+        widget.userPhoto,
         context,
       ),
       body: Padding(
@@ -146,12 +140,22 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Row(
                                 children: [
-                                  Text(
-                                    "View all",
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: kPrimaryColor,
+                                  GestureDetector(
+                                    onTap: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AvailableCars(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "View all",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: kPrimaryColor,
+                                      ),
                                     ),
                                   ),
                                   SizedBox(
@@ -176,12 +180,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         GestureDetector(
-                          // onTap: () {
-                          //   Navigator.push(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (context) => BookCar(car: cars[0],)));
-                          // },
+                          onTap: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AvailableCars(),
+                              ),
+                            );
+                          },
                           child: Padding(
                             padding:
                                 EdgeInsets.only(top: 16, right: 16, left: 16),
@@ -247,6 +253,7 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           height: 10,
                         ),
+
                         // Padding(
                         //   padding: EdgeInsets.all(16),
                         //   child: Row(
@@ -320,7 +327,16 @@ class _HomePageState extends State<HomePage> {
     for (var i = 0; i < cars.length; i++) {
       list.add(
         GestureDetector(
-          onTap: () {},
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookCar(
+                  car: cars[i],
+                ),
+              ),
+            );
+          },
           child: buildCar(cars[i], i),
         ),
       );

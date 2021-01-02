@@ -9,47 +9,29 @@ var agencyReference = FirebaseFirestore.instance.collection("Agency");
 
 class FirebaseFunctions {
   Future<void> createUserRecord(Users users) async {
-    if (users.image != null) {
-      final FirebaseStorage storage =
-          FirebaseStorage(storageBucket: 'gs://carsfin-5a805.appspot.com');
-      String imagePath = "Users/Images/${users.phoneNumber}.png";
-      String userImageUrl;
-      UploadTask uploadTask;
-      uploadTask = storage.ref().child(imagePath).putFile(users.image);
-      var url = (await uploadTask).ref.getDownloadURL().then(
-            (value) => userImageUrl = value.toString(),
-          );
+    final FirebaseStorage storage =
+        FirebaseStorage(storageBucket: 'gs://carsfin-5a805.appspot.com');
+    String imagePath = "Users/Images/${users.phoneNumber}.png";
+    String userImageUrl;
+    UploadTask uploadTask;
+    uploadTask = storage.ref().child(imagePath).putFile(users.image);
+    var url = await (await uploadTask).ref.getDownloadURL();
+    userImageUrl = url.toString();
 
-      var response = await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(users.phoneNumber)
-          .set(
-        {
-          "userName": users.name,
-          "Phone Number": users.phoneNumber,
-          "Location": "",
-          "Cars Sold": 0,
-          "Cars bought": 0,
-          "TimeStamp": DateTime.now(),
-          "Image": userImageUrl,
-        },
-      );
-    } else {
-      var response = await FirebaseFirestore.instance
-          .collection("Users")
-          .doc(users.phoneNumber)
-          .set(
-        {
-          "userName": users.name,
-          "Phone Number": users.phoneNumber,
-          "Location": "",
-          "Cars Sold": 0,
-          "Cars bought": 0,
-          "TimeStamp": DateTime.now(),
-          "Image": "",
-        },
-      );
-    }
+    var response = await FirebaseFirestore.instance
+        .collection("Users")
+        .doc(users.phoneNumber)
+        .set(
+      {
+        "userName": users.name,
+        "Phone Number": users.phoneNumber,
+        "Location": "",
+        "Cars Sold": 0,
+        "Cars bought": 0,
+        "TimeStamp": DateTime.now(),
+        "Image": userImageUrl,
+      },
+    );
   }
 
   Future<void> createCarRecord(Car car) async {
@@ -59,13 +41,12 @@ class FirebaseFunctions {
 
     UploadTask uploadTask;
     for (int i = 0; i < car.images.length; i++) {
-      String imagePath = "Cars/Images/${car.carNumber}/${car.carNumber}.png";
+      String imagePath =
+          "Cars/Images/${car.carNumber}/${car.carNumber}${DateTime.now()}.png";
       uploadTask = storage.ref().child(imagePath).putFile(car.images[i]);
 
-      var url = (await uploadTask)
-          .ref
-          .getDownloadURL()
-          .then((value) => imageUrl.add(value.toString()));
+      var url = await (await uploadTask).ref.getDownloadURL();
+      imageUrl.add(url.toString());
     }
 
     var response = FirebaseFirestore.instance;
@@ -90,6 +71,7 @@ class FirebaseFunctions {
         "Other Features": car.otherFeatures,
         "KM Driven": car.kmDriven,
         "Images": imageUrl,
+        "Ownership": car.ownerShip,
       },
     );
   }
@@ -144,7 +126,6 @@ class FirebaseFunctions {
     print(phoneNumbe);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumbe).get();
-    print(documentSnapshot.data());
   }
 
   Future getAgency(String phoneNumber) async {
@@ -158,7 +139,6 @@ class FirebaseFunctions {
         phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumbe).get();
-    print(documentSnapshot.data());
     if (documentSnapshot.exists) {
       return true;
     } else {

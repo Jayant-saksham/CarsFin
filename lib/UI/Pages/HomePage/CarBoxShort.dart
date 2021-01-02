@@ -51,13 +51,16 @@ Widget buildCar(Car car, int index) {
             height: 8,
           ),
           Container(
-            height: 120,
+            height: 130,
             child: Center(
               child: Hero(
                 tag: car.model,
-                child: Image.network(
-                  car.images[0],
-                  fit: BoxFit.fitWidth,
+                child: ClipRRect(
+                   borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    car.images[0],
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
               ),
             ),

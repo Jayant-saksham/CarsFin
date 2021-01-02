@@ -34,10 +34,12 @@ class _AvailableCarsState extends State<AvailableCars> {
               images: element.data()["Images"],
               isApproved: element.data()["Is Approved"],
               isAvailable: true,
+              hasRC: element.data()["Has RC"],
               kmDriven: element.data()["KM Driven"],
               model: element.data()["Car Model"],
               price: element.data()["Price"],
               carNumber: element.data()["Car Number"],
+              ownerShip: element.data()["Ownership"],
               milage: element.data()["Milage"],
               seats: element.data()["Seats"],
               location: element.data()["Location"],
@@ -78,7 +80,9 @@ class _AvailableCarsState extends State<AvailableCars> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Login()),
+                MaterialPageRoute(
+                  builder: (context) => Login(),
+                ),
               );
             },
           ),

@@ -10,18 +10,19 @@ class BookCar extends StatefulWidget {
 }
 
 class _BookCarState extends State<BookCar> {
-  String get price => widget.car.toString();
+  String get price => widget.car.price;
   String get brand => widget.car.brand;
   String get model => widget.car.model;
+  // List<String> get imageList => widget.car.imageUrl;
 
   int _currentImage = 0;
-  List<Widget> buildPageIndicator() {
-    List<Widget> list = [];
-    for (var i = 0; i < widget.car.images.length; i++) {
-      list.add(buildIndicator(i == _currentImage));
-    }
-    return list;
-  }
+  // List<Widget> buildPageIndicator() {
+  //   List<Widget> list = [];
+  //   for (var i = 0; i < widget.car.images.length; i++) {
+  //     list.add(buildIndicator(i == _currentImage));
+  //   }
+  //   return list;
+  // }
 
   Widget buildIndicator(bool isActive) {
     return AnimatedContainer(
@@ -85,39 +86,41 @@ class _BookCarState extends State<BookCar> {
                             Row(
                               children: [
                                 Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    color: kPrimaryColor,
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
                                     ),
-                                    child: Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
-                                      size: 22,
-                                    )),
+                                  ),
+                                  child: Icon(
+                                    Icons.bookmark_border,
+                                    color: Colors.white,
+                                    size: 22,
+                                  ),
+                                ),
                                 SizedBox(
                                   width: 16,
                                 ),
                                 Container(
-                                    width: 45,
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(15),
-                                      ),
-                                      border: Border.all(
-                                        color: Colors.grey[300],
-                                        width: 1,
-                                      ),
+                                  width: 45,
+                                  height: 45,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
                                     ),
-                                    child: Icon(
-                                      Icons.share,
-                                      color: Colors.black,
-                                      size: 22,
-                                    )),
+                                    border: Border.all(
+                                      color: Colors.grey[300],
+                                      width: 1,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.share,
+                                    color: Colors.black,
+                                    size: 22,
+                                  ),
+                                ),
                               ],
                             ),
                           ],
@@ -131,7 +134,7 @@ class _BookCarState extends State<BookCar> {
                           horizontal: 16,
                         ),
                         child: Text(
-                          widget.car.model,
+                          widget.car.brand,
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 36,
@@ -155,193 +158,186 @@ class _BookCarState extends State<BookCar> {
                       SizedBox(
                         height: 8,
                       ),
-                      Expanded(
-                        child: Container(
-                          child: PageView(
-                            physics: BouncingScrollPhysics(),
-                            onPageChanged: (int page) {
-                              setState(() {
-                                _currentImage = page;
-                              });
-                            },
-                            children: widget.car.images.map((image) {
-                              return Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                ),
-                                child: Hero(
-                                  tag: widget.car.model,
-                                  child: Image.network(
-                                    image.toString(),
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                      widget.car.images.length > 1
-                          ? Container(
-                              margin: EdgeInsets.symmetric(vertical: 16),
-                              height: 30,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: buildPageIndicator(),
-                              ),
-                            )
-                          : Container(),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 14),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            buildPricePerPeriod(
-                              "12",
-                              "4.350",
-                              true,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            buildPricePerPeriod(
-                              "6",
-                              "4.800",
-                              false,
-                            ),
-                            SizedBox(
-                              width: 16,
-                            ),
-                            buildPricePerPeriod(
-                              "1",
-                              "5.100",
-                              false,
-                            ),
-                          ],
-                        ),
-                      ),
+                      // Expanded(
+                      //   child: Container(
+                      //     child: PageView(
+                      //       physics: BouncingScrollPhysics(),
+                      //       onPageChanged: (int page) {
+                      //         setState(() {
+                      //           _currentImage = page;
+                      //         });
+                      //       },
+                      //       children: imageList.map((image) {
+                      //         return Container(
+                      //           padding: EdgeInsets.symmetric(
+                      //             horizontal: 16,
+                      //           ),
+                      //         );
+                      //       }).toList(),
+                      //     ),
+                      //   ),
+                      // ),
+                      // widget.car.images.length > 1
+                      //     ? Container(
+                      //         margin: EdgeInsets.symmetric(vertical: 16),
+                      //         height: 30,
+                      //         child: Row(
+                      //           mainAxisAlignment: MainAxisAlignment.center,
+                      //           children: buildPageIndicator(),
+                      //         ),
+                      //       )
+                      //     : Container(),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(horizontal: 14),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       buildPricePerPeriod(
+                      //         "Milage",
+                      //         widget.car.milage,
+                      //         true,
+                      //       ),
+                      //       SizedBox(
+                      //         width: 16,
+                      //       ),
+                      //       buildPricePerPeriod(
+                      //         "6",
+                      //         "4.800",
+                      //         false,
+                      //       ),
+                      //       SizedBox(
+                      //         width: 16,
+                      //       ),
+                      //       buildPricePerPeriod(
+                      //         "1",
+                      //         "5.100",
+                      //         false,
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-                      child: Text(
-                        "SPECIFICATIONS",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.12,
-                      padding: EdgeInsets.only(
-                        top: 8,
-                        left: 16,
-                      ),
-                      margin: EdgeInsets.only(bottom: 16),
-                      child: ListView(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          buildSpecificationCar("Color", "White"),
-                          buildSpecificationCar("Gearbox", "Automatic"),
-                          buildSpecificationCar("Seat", "4"),
-                          buildSpecificationCar("Motor", "v10 2.0"),
-                          buildSpecificationCar("Speed (0-100)", "3.2 sec"),
-                          buildSpecificationCar("Top Speed", "121 mph"),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   decoration: BoxDecoration(
+              //     color: Colors.grey[100],
+              //     borderRadius: BorderRadius.only(
+              //       topLeft: Radius.circular(30),
+              //       topRight: Radius.circular(30),
+              //     ),
+              //   ),
+              //   child: Column(
+              //     crossAxisAlignment: CrossAxisAlignment.start,
+              //     children: [
+              //       Padding(
+              //         padding: EdgeInsets.only(top: 16, left: 16, right: 16),
+              //         child: Text(
+              //           "SPECIFICATIONS",
+              //           style: TextStyle(
+              //             fontSize: 22,
+              //             fontWeight: FontWeight.bold,
+              //             color: Colors.grey[400],
+              //           ),
+              //         ),
+              //       ),
+              //       Container(
+              //         height: MediaQuery.of(context).size.height * 0.12,
+              //         padding: EdgeInsets.only(
+              //           top: 8,
+              //           left: 16,
+              //         ),
+              //         margin: EdgeInsets.only(bottom: 16),
+              //         child: ListView(
+              //           physics: BouncingScrollPhysics(),
+              //           scrollDirection: Axis.horizontal,
+              //           children: [
+              //             buildSpecificationCar("Color", "White"),
+              //             buildSpecificationCar("Gearbox", "Automatic"),
+              //             buildSpecificationCar("Seat", "4"),
+              //             buildSpecificationCar("Motor", "v10 2.0"),
+              //             buildSpecificationCar("Speed (0-100)", "3.2 sec"),
+              //             buildSpecificationCar("Top Speed", "121 mph"),
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: MediaQuery.of(context).size.height * 0.12,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "12 Month",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "₹ " + widget.car.price,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            InkWell(
-              onTap: () => print("Hello"),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(15),
-                  ),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      "Book this car",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   height: MediaQuery.of(context).size.height * 0.12,
+      //   padding: EdgeInsets.all(16),
+      //   decoration: BoxDecoration(
+      //     color: Colors.white,
+      //   ),
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //     children: [
+      //       Column(
+      //         crossAxisAlignment: CrossAxisAlignment.start,
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           Text(
+      //             "12 Month",
+      //             style: TextStyle(
+      //               color: Colors.black,
+      //               fontWeight: FontWeight.bold,
+      //               fontSize: 14,
+      //             ),
+      //           ),
+      //           SizedBox(
+      //             height: 4,
+      //           ),
+      //           Row(
+      //             children: [
+      //               Text(
+      //                 "₹ " + widget.car.price,
+      //                 style: TextStyle(
+      //                   color: Colors.black,
+      //                   fontWeight: FontWeight.bold,
+      //                   fontSize: 22,
+      //                 ),
+      //               ),
+      //               SizedBox(
+      //                 width: 8,
+      //               ),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //       InkWell(
+      //         onTap: () => print("Hello"),
+      //         child: Container(
+      //           height: 50,
+      //           decoration: BoxDecoration(
+      //             color: kPrimaryColor,
+      //             borderRadius: BorderRadius.all(
+      //               Radius.circular(15),
+      //             ),
+      //           ),
+      //           child: Center(
+      //             child: Padding(
+      //               padding: EdgeInsets.symmetric(horizontal: 24),
+      //               child: Text(
+      //                 "Book this car",
+      //                 style: TextStyle(
+      //                   color: Colors.white,
+      //                   fontWeight: FontWeight.bold,
+      //                   fontSize: 16,
+      //                 ),
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
@@ -376,18 +372,11 @@ class _BookCarState extends State<BookCar> {
                 child: Container(),
               ),
               Text(
-                price,
+                widget.car.carNumber,
                 style: TextStyle(
                   color: selected ? Colors.white : Colors.black,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                "USD",
-                style: TextStyle(
-                  color: selected ? Colors.white : Colors.black,
-                  fontSize: 14,
                 ),
               ),
             ],

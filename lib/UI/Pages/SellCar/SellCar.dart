@@ -25,10 +25,16 @@ class _SellCarState extends State<SellCar> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(
+                height: 10,
+              ),
               Center(
                 child: Text(
                   "Enter the details of your Car",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
               SizedBox(
@@ -37,11 +43,11 @@ class _SellCarState extends State<SellCar> {
               Center(
                 child: Text(
                   "All fields are compulsary",
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 60,
               ),
               SizedBox(
                 height: 60,
@@ -118,19 +124,18 @@ class _SellCarState extends State<SellCar> {
                         textColor: Colors.white,
                         fontSize: 16.0,
                       );
-                    }
-                    else{
+                    } else {
                       Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SellCar2(
-                          carBrand: carbrand,
-                          carNumber: carNum,
-                          kmDriven: dmDriven,
-                          modelNumber: modelNumber,
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SellCar2(
+                            carBrand: carbrand,
+                            carNumber: carNum,
+                            kmDriven: dmDriven,
+                            modelNumber: modelNumber,
+                          ),
                         ),
-                      ),
-                    );
+                      );
                     }
                   },
                   child: Text(

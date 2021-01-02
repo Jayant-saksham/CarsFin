@@ -1,11 +1,13 @@
 import 'package:Cars/Themes/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:Cars/UI/Pages/Login/Login.dart';
 import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
 import 'package:Cars/UI/Pages/SellCar/SellCar.dart';
+import 'package:Cars/UI/Pages/ContactUs/ContactUs.dart';
+import 'package:Cars/UI/Pages/HomePage/AvailableCars.dart';
+import 'package:Cars/UI/Pages/UserProfile/UserProfile.dart';
 
 Widget myDrawer(
     String userName, String phoneNumber, String userImage, context) {
@@ -42,37 +44,60 @@ Widget myDrawer(
         ),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Home"),
-          leading: Icon(EvaIcons.homeOutline),
-        ),
+            title: Text("Home"),
+            leading: Icon(EvaIcons.homeOutline),
+            onTap: () {
+              Navigator.pop(context);
+            }),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Account"),
-          leading: Icon(EvaIcons.personOutline),
-        ),
+            title: Text("Account"),
+            leading: Icon(EvaIcons.personOutline),
+            onTap: () async {
+              Navigator.pop(context);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Profile(),
+                ),
+              );
+            }),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Cars"),
-          leading: Icon(EvaIcons.hardDrive),
-        ),
-        
+            title: Text("Cars"),
+            leading: Icon(EvaIcons.hardDrive),
+            onTap: () async {
+              Navigator.pop(context);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AvailableCars(),
+                ),
+              );
+            }),
         SizedBox(height: 10),
         SizedBox(height: 20),
         Divider(),
         ListTile(
-          title: Text("Help"),
-          leading: Icon(EvaIcons.questionMarkCircleOutline),
-        ),
+            title: Text("Help"),
+            leading: Icon(EvaIcons.questionMarkCircleOutline),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUs(),));
+            }),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Share"),
-          leading: Icon(EvaIcons.share),
-        ),
+            title: Text("Share"),
+            leading: Icon(EvaIcons.share),
+            onTap: () {
+              Navigator.pop(context);
+            }),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Rate us"),
-          leading: Icon(EvaIcons.edit2),
-        ),
+            title: Text("Rate us"),
+            leading: Icon(EvaIcons.edit2),
+            onTap: () {
+              Navigator.pop(context);
+            }),
         SizedBox(height: 10),
         ListTile(
           title: Text("Logout"),

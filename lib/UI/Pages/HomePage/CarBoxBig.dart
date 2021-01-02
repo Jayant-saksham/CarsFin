@@ -67,25 +67,25 @@ Widget carAdLong(Car car, context) {
                       : SizedBox(
                           width: 10,
                         ),
-                  //   car.hasRC
-                  // ? Container(
-                  //     width: 90,
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(10),
-                  //       color: Colors.indigo,
-                  //     ),
-                  //     child: Center(
-                  //       child: Text(
-                  //         "RC",
-                  //         style: TextStyle(
-                  //           color: Colors.white,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   )
-                  // : SizedBox(
-                  //     width: 10,
-                  //   ),
+                  car.hasRC
+                      ? Container(
+                          width: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.indigo,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "RC",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: 10,
+                        ),
                 ],
               ),
               SizedBox(
@@ -204,27 +204,46 @@ Widget carAdLong(Car car, context) {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: Image.network(
-                      car.images[0],
-                      width: 160,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        car.images[0],
+                        width: 160,
+                      ),
                     ),
                   ),
                   Column(
                     children: [
-                      Text(
-                        car.dealerName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                      Container(
+                        width: 90,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(3),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Details",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
+                      SizedBox(height: 10,),
+                      Text(
+                        car.carNumber,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18
+                        ),
                       ),
                     ],
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

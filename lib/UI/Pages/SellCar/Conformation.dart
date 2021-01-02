@@ -51,12 +51,15 @@ class ConfirmationPage extends StatefulWidget {
 
 class _ConfirmationPageState extends State<ConfirmationPage> {
   Car car;
+  bool isUploaded = false;
+
   @override
   void initState() {
     super.initState();
     setState(() {
       car = Car(
         hasRC: widget.hasRC,
+        ownerShip: widget.ownerShip,
         brand: widget.carBrand,
         dealerName: widget.name,
         dealerPhoneNumber: widget.phoneNumber,
@@ -121,6 +124,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
               color: Colors.indigo,
               onPressed: () {
                 FirebaseFunctions().createCarRecord(car);
+                isUploaded = true;
                 Navigator.push(
                   context,
                   MaterialPageRoute(

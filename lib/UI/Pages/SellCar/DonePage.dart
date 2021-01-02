@@ -31,9 +31,10 @@ class _DonePageState extends State<DonePage> {
             child: Text(
               "You car has been",
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
           SizedBox(
@@ -43,12 +44,12 @@ class _DonePageState extends State<DonePage> {
             child: Text(
               "successfully uploaded",
               style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-          
           SizedBox(
             height: 100,
           ),

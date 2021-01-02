@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:Cars/backend/FirebaseBackend.dart';
 import 'package:Cars/Models/Users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Users user;
 
@@ -155,23 +156,35 @@ class _NamePageState extends State<NamePage> {
                   child: MaterialButton(
                     color: Colors.indigo,
                     onPressed: () {
-                      setState(() {
-                        user = Users(
-                          name: userName,
-                          phoneNumber: widget.userPhone,
-                          image: userImage,
+                      if (userImage == null || userName == null) {
+                        Fluttertoast.showToast(
+                          msg: "Image and Name is compulsary",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
                         );
-                      });
-                      FirebaseFunctions().createUserRecord(user);
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BottomNavScreen(
-                            phoneNumber: user.phoneNumber,
+                      } else {
+                        setState(() {
+                          user = Users(
+                            name: userName,
+                            phoneNumber: widget.userPhone,
+                            image: userImage,
+                          );
+                        });
+                        FirebaseFunctions().createUserRecord(user);
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavScreen(
+                              phoneNumber: user.phoneNumber,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Text(
                       "Next",
