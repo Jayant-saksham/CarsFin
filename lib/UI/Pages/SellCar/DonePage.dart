@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DonePage extends StatefulWidget {
   String carNumber;
@@ -64,11 +65,15 @@ class _DonePageState extends State<DonePage> {
           ),
           MaterialButton(
             onPressed: () {
-              Navigator.push(
+              Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BottomNavScreen(),
+                  builder: (context) => BottomNavScreen(
+                    phoneNumber: FirebaseAuth.instance.currentUser.phoneNumber,
+                    // isAgency: false,
+                  ),
                 ),
+                (route) => false,
               );
             },
             color: Colors.indigo,

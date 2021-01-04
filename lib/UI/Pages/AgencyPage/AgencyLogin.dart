@@ -1,191 +1,212 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class AgencyPage extends StatefulWidget {
+var agencyReference = FirebaseFirestore.instance.collection("Agency");
+
+class AgencyLogin extends StatefulWidget {
   @override
-  AgencyPageState createState() => AgencyPageState();
+  _AgencyLoginState createState() => _AgencyLoginState();
 }
 
-class AgencyPageState extends State<AgencyPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+class _AgencyLoginState extends State<AgencyLogin> {
   String phoneNumber;
-  String verificationId, smsCode;
+  String verificationCode;
+
+  TextEditingController otpController;
+  TextEditingController phoneController;
+
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String verificationId;
   bool codeSent = false;
-  String userName;
+
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            padding: EdgeInsets.only(right: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 15,
-                ),
-                Image.asset(
-                  'assets/images/ferrari_spider_488_1.png',
-                  width: MediaQuery.of(context).size.width * 0.8,
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 15,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: Text(
-                    "Login",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 33,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: Text(
-                    "Please Sign in to continue ",
-                    style: TextStyle(
-                      color: Colors.grey[700],
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height / 9),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: _enterEmail(),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 25,
-                    right: 25,
-                  ),
-                  child: _buildPassword(),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.05,
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                      left: 30,
-                      right: 30,
-                    ),
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
-                          color: Colors.amber[600],
-                        ),
-                        height: 36,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Center(
-                          child: Text(
-                            "Login",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      "Don't have an account ?",
-                      style: TextStyle(color: Colors.grey[700], fontSize: 16),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        "Sign Up",
-                        style: TextStyle(
-                          color: Colors.indigo,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
+  void initState() {
+    otpController = TextEditingController();
+    phoneController = TextEditingController();
+    super.initState();
+  }
+
+  Future<void> verifyPhone(phoneNo) async {
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      verificationId = verId;
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      verificationId = verId;
+      setState(() {
+        codeSent = true;
+      });
+      Fluttertoast.showToast(
+        msg: "OTP send",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    };
+
+    final PhoneVerificationCompleted verifiedSuccess = (AuthCredential auth) {
+      firebaseAuth.signInWithCredential(auth).then((value) {
+        if (value.user != null) {
+          User user = value.user;
+          userAuthorized();
+        } else {
+          debugPrint('user not authorized');
+        }
+      }).catchError((error) {
+        debugPrint('error : $error');
+      });
+    };
+
+    final PhoneVerificationFailed veriFailed = (exception) {
+      print('${exception.message}');
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNo,
+      codeAutoRetrievalTimeout: autoRetrieve,
+      codeSent: smsCodeSent,
+      timeout: const Duration(seconds: 30),
+      verificationCompleted: verifiedSuccess,
+      verificationFailed: veriFailed,
+    );
+  }
+
+  void verifyOTP(String smsCode) async {
+    var _authCredential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId, smsCode: smsCode);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
+          );
+        });
+    firebaseAuth.signInWithCredential(_authCredential).then((result) {
+      User user = result.user;
+
+      if (user != null) {
+        userAuthorized();
+      }
+
+      ///go To Next Page
+    }).catchError((error) {
+      Navigator.pop(context);
+    });
+  }
+
+  userAuthorized() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BottomNavScreen(
+          phoneNumber: phoneController.text,
+          // isAgency: true,
         ),
       ),
     );
   }
 
-  Widget _buildPassword() {
-    return TextFormField(
-      obscureText: true,
-      keyboardType: TextInputType.text,
-      textInputAction: TextInputAction.done,
-      decoration: InputDecoration(
-          icon: Icon(Icons.lock),
-          labelText: 'Password',
-          border: OutlineInputBorder()),
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Password is Required';
-        }
-        return null;
-      },
-      onChanged: (value) {
-        setState(() {
-          this.phoneNumber = value;
-          this.phoneNumber = "+91 " + phoneNumber;
-        });
-      },
-    );
-  }
-
-  Widget _enterEmail() {
-    return TextFormField(
-      textCapitalization: TextCapitalization.words,
-      textInputAction: TextInputAction.next,
-      validator: (value) {
-        if (value.isEmpty) {
-          print("Cannot be empty");
-        }
-      },
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        icon: Icon(Icons.email),
-        labelText: "Email",
-        border: OutlineInputBorder(),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "Register",
+              style: TextStyle(
+                fontSize: 26,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width / 20,
+            ),
+            Text(
+              "CarsFin will send a OTP to verify ",
+              style: TextStyle(
+                color: Color(0xFF818181),
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              "your Phone number",
+              style: TextStyle(
+                color: Color(0xFF818181),
+                fontSize: 18,
+              ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.width / 8,
+            ),
+            TextField(
+              keyboardType: TextInputType.phone,
+              controller: phoneController,
+              decoration: InputDecoration(hintText: 'Enter phone Number'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: TextField(
+                controller: otpController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(hintText: 'Enter OTP'),
+              ),
+            ),
+            SizedBox(
+              height: 60,
+            ),
+            codeSent
+                ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MaterialButton(
+                      color: Colors.indigo,
+                      onPressed: () => verifyOTP(otpController.text.trim()),
+                      child: Center(
+                        child: Text(
+                          "Verify",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MaterialButton(
+                      color: Colors.indigo,
+                      onPressed: () =>
+                          verifyPhone("+91 " + phoneController.text.trim()),
+                      child: Center(
+                        child: Text(
+                          "Send OTP",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ),
       ),
-      onChanged: (value) {
-        setState(
-          () {
-            userName = value;
-          },
-        );
-      },
     );
   }
 }

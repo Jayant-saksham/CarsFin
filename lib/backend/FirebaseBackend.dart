@@ -124,11 +124,16 @@ class FirebaseFunctions {
       Car car, String email, String phoneNumber, String name) async {
     var response = FirebaseFirestore.instance
         .collection("Bookings")
-        .doc(car.carNumber)
+        .doc(car.carNumber + DateTime.now().toString())
         .set({
       "Car Number": car.carNumber,
       "Name": name,
       "Phone Number": phoneNumber,
+      "Email": email,
+      "Car Brand": car.brand,
+      "Car Model": car.model,
+      "Car Owner Number": car.dealerPhoneNumber,
+      "Car Owner Name": car.dealerName,
     });
   }
 }

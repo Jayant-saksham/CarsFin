@@ -1,13 +1,17 @@
+import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:Cars/backend/FirebaseAuth.dart';
+import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginOTP extends StatefulWidget {
   String phoneNumber;
   String verificationID;
+  String name;
   LoginOTP({
     @required this.phoneNumber,
     @required this.verificationID,
+    this.name,
   });
   @override
   _LoginOTPState createState() => _LoginOTPState();
@@ -67,6 +71,16 @@ class _LoginOTPState extends State<LoginOTP> {
                   color: Colors.indigo,
                   onPressed: () {
                     AuthService().signInWithOTP(smsCode, widget.verificationID);
+
+                    // Navigator.pop(context);
+                    // Navigator.push
+
+                    // AuthService().handleAuth();
+                    // Navigator.popUntil(context, (route) => false);
+                    // Navigator.popUntil(context, (route) => false);
+
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                   child: Text(
                     "Verify",
@@ -118,7 +132,7 @@ class _LoginOTPState extends State<LoginOTP> {
             style: TextStyle(
               color: Color(0xFF818181),
             ),
-          )
+          ),
         ],
       ),
     );

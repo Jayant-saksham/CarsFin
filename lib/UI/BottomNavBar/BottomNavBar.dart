@@ -1,19 +1,23 @@
 import 'package:Cars/UI/Pages/SellCar/SellCar.dart';
-import 'package:Cars/backend/FirebaseBackend.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/Pages/HomePage/AvailableCars.dart';
 import 'package:Cars/UI/Pages/HomePage/HomePage.dart';
 import 'package:Cars/UI/Pages/UserProfile/UserProfile.dart';
 import 'package:Cars/UI/Pages/NotificationPage/NotificationPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Cars/UI/Pages/NamePage/NamePage.dart';
+// import 'package:Cars/UI/Pages/NamePage/AgencyName.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 var userReference = FirebaseFirestore.instance.collection("Users");
+var agencyReference = FirebaseFirestore.instance.collection("Agency");
 
 class BottomNavScreen extends StatefulWidget {
   String phoneNumber;
-  String name;
-
-  BottomNavScreen({this.phoneNumber, this.name});
+  // bool isAgency;
+  BottomNavScreen({
+    this.phoneNumber,
+  });
   @override
   _BottomNavScreenState createState() => _BottomNavScreenState();
 }
@@ -22,26 +26,80 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
   String userName;
   String image;
   PageController pageController;
+  bool isExist = false;
   int _currentIndex = 0;
   var user;
-  getCurrentUser(String phoneNumber) async {
-    String phoneNumbe =
-        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
-    print(phoneNumbe);
+
+  String phoneNo, verificationId, smsCode;
+  Future<bool> checkIfUserExist(String phoneNumber) async {
     final DocumentSnapshot documentSnapshot =
         await userReference.doc(phoneNumber).get();
-    print(documentSnapshot.data());
-    setState(() {
-      userName = documentSnapshot.data()["userName"];
-      image = documentSnapshot.data()["Image"];
-    });
+    if (documentSnapshot.exists) {
+      setState(() {
+        isExist = true;
+        userName = documentSnapshot.data()["userName"];
+        image = documentSnapshot.data()["Image"];
+      });
+    } else {
+      setState(() {
+        isExist = false;
+      });
+    }
+    return isExist;
+  }
+
+  Future<bool> checkIfAgencyExist(String phoneNumber) async {
+    final DocumentSnapshot documentSnapshot =
+        await agencyReference.doc(phoneNumber).get();
+    if (documentSnapshot.exists) {
+      setState(() {
+        isExist = true;
+        userName = documentSnapshot.data()["Name"];
+        image = documentSnapshot.data()["Image"];
+      });
+    } else {
+      setState(() {
+        isExist = false;
+      });
+    }
+    return isExist;
   }
 
   @override
   void initState() {
     super.initState();
     pageController = PageController();
-    getCurrentUser(widget.phoneNumber);
+    checkIfUserExist(FirebaseAuth.instance.currentUser.phoneNumber).then(
+      (user) {
+        if (!user) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NamePage(
+                userPhone: widget.phoneNumber,
+              ),
+            ),
+          );
+        }
+      },
+    );
+    // !widget.isAgency
+    //     ?
+    //     : checkIfAgencyExist(FirebaseAuth.instance.currentUser.phoneNumber)
+    //         .then(
+    //         (agency) {
+    //           if (!agency) {
+    //             Navigator.push(
+    //               context,
+    //               MaterialPageRoute(
+    //                 builder: (context) => AgencyNamePage(
+    //                   userPhone: phoneNo,
+    //                 ),
+    //               ),
+    //             );
+    //           }
+    //         },
+    //       );
   }
 
   @override

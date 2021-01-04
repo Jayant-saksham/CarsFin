@@ -56,29 +56,31 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      car = Car(
-        hasRC: widget.hasRC,
-        ownerShip: widget.ownerShip,
-        brand: widget.carBrand,
-        dealerName: widget.name,
-        dealerPhoneNumber: widget.phoneNumber,
-        hasInsurance: widget.hasInsurance,
-        hasPollution: widget.hasPollution,
-        images: widget.images,
-        isApproved: false,
-        isAvailable: true,
-        kmDriven: widget.kmDriven,
-        model: widget.carModel,
-        price: widget.price,
-        carNumber: widget.carNumber,
-        dateofPurchased: "",
-        location: widget.location,
-        milage: widget.milage,
-        sellerEmail: widget.email,
-        seats: widget.seats.toString().length > 0 ? widget.seats : 0,
-      );
-    });
+    setState(
+      () {
+        car = Car(
+          hasRC: widget.hasRC,
+          ownerShip: widget.ownerShip,
+          brand: widget.carBrand,
+          dealerName: widget.name,
+          dealerPhoneNumber: widget.phoneNumber,
+          hasInsurance: widget.hasInsurance,
+          hasPollution: widget.hasPollution,
+          images: widget.images,
+          isApproved: false,
+          isAvailable: true,
+          kmDriven: widget.kmDriven,
+          model: widget.carModel,
+          price: widget.price,
+          carNumber: widget.carNumber,
+          dateofPurchased: widget.dateofPurchase,
+          location: widget.location,
+          milage: widget.milage,
+          sellerEmail: widget.email,
+          seats: widget.seats.toString().length > 0 ? widget.seats : 0,
+        );
+      },
+    );
   }
 
   @override

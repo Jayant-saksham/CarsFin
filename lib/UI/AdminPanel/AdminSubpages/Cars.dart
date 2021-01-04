@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Cars/UI/Widgets/AppBar.dart';
 
 class AllCars extends StatefulWidget {
   @override
@@ -8,6 +9,10 @@ class AllCars extends StatefulWidget {
 class _AllCarsState extends State<AllCars> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: appBar(
+        title: "Car"
+      ),
+    );
   }
 }

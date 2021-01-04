@@ -1,51 +1,126 @@
-import 'package:flutter/material.dart';
-import 'package:country_pickers/country.dart';
-import 'package:country_pickers/country_pickers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:Cars/backend/FirebaseAuth.dart';
-import 'package:Cars/UI/Pages/OTPPage/OTPScreenPage.dart';
+import 'package:flutter/material.dart';
+import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:Cars/UI/Pages/UserLogin/UserLogin.dart';
+import 'package:Cars/UI/Pages/AgencyPage/AgencyLogin.dart';
 
-class RegisterPage extends StatefulWidget {
+class PhoneAuth extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _PhoneAuthState createState() => _PhoneAuthState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  TextEditingController _phoneAuthController = TextEditingController();
-  static Country _selectedFilteredDialogCountry =
-      CountryPickerUtils.getCountryByPhoneCode("91");
-  bool codeSent = false;
-  String phoneNo, verificationId, smsCode;
+class _PhoneAuthState extends State<PhoneAuth> {
+  String phoneNumber;
+  String verificationCode;
 
-  String _countryCode = _selectedFilteredDialogCountry.phoneCode;
-  String _phoneNumber = "";
+  TextEditingController otpController;
+  TextEditingController phoneController;
+
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String verificationId;
+  bool codeSent = false;
+
   @override
-  void dispose() {
-    _phoneAuthController.dispose();
-    super.dispose();
+  void initState() {
+    otpController = TextEditingController();
+    phoneController = TextEditingController();
+    super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: _bodyWidget(),
+  Future<void> verifyPhone(phoneNo) async {
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      verificationId = verId;
+    };
+
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      verificationId = verId;
+      setState(() {
+        codeSent = true;
+      });
+      Fluttertoast.showToast(
+        msg: "OTP send",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    };
+
+    final PhoneVerificationCompleted verifiedSuccess = (AuthCredential auth) {
+      firebaseAuth.signInWithCredential(auth).then((value) {
+        if (value.user != null) {
+          User user = value.user;
+          userAuthorized();
+        } else {
+          debugPrint('user not authorized');
+        }
+      }).catchError((error) {
+        debugPrint('error : $error');
+      });
+    };
+
+    final PhoneVerificationFailed veriFailed = (exception) {
+      print('${exception.message}');
+    };
+
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNo,
+      codeAutoRetrievalTimeout: autoRetrieve,
+      codeSent: smsCodeSent,
+      timeout: const Duration(seconds: 30),
+      verificationCompleted: verifiedSuccess,
+      verificationFailed: veriFailed,
+    );
+  }
+
+  void verifyOTP(String smsCode) async {
+    var _authCredential = PhoneAuthProvider.getCredential(
+        verificationId: verificationId, smsCode: smsCode);
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return Container(
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        });
+    firebaseAuth.signInWithCredential(_authCredential).then((result) {
+      User user = result.user;
+
+      if (user != null) {
+        userAuthorized();
+      }
+
+      ///go To Next Page
+    }).catchError((error) {
+      Navigator.pop(context);
+    });
+  }
+
+  userAuthorized() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BottomNavScreen(
+          phoneNumber: phoneController.text,
+          // isAgency: false,
+        ),
       ),
     );
   }
 
-  Widget _bodyWidget() {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.width / 5,
-            ),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             Text(
               "Register",
               style: TextStyle(
@@ -74,80 +149,59 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: MediaQuery.of(context).size.width / 8,
             ),
-            ListTile(
-              onTap: _openFilteredCountryPickerDialog,
-              title: _buildDialogItem(
-                _selectedFilteredDialogCountry,
+            TextField(
+              keyboardType: TextInputType.phone,
+              controller: phoneController,
+              decoration: InputDecoration(hintText: 'Enter phone Number'),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: TextField(
+                controller: otpController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(hintText: 'Enter OTP'),
               ),
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.width / 25,
+              height: 60,
             ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Colors.grey,
+            codeSent
+                ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MaterialButton(
+                      color: Colors.indigo,
+                      onPressed: () => verifyOTP(otpController.text.trim()),
+                      child: Center(
+                        child: Text(
+                          "Verify",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  width: 80,
-                  height: 42,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "${_selectedFilteredDialogCountry.phoneCode}",
-                    style: TextStyle(
-                      color: Color(0xFF818181),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 8.0,
-                ),
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    child: TextFormField(
-                      onChanged: (value) {
-                        setState(() {
-                          phoneNo = "+" + _countryCode + " " + value.trim();
-                        });
-                      },
-                      keyboardType: TextInputType.phone,
-                      controller: _phoneAuthController,
-                      decoration: InputDecoration(
-                        hintText: "Phone Number",
-                        hintStyle: TextStyle(
-                          color: Color(0xFF818181),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: MaterialButton(
+                      color: Colors.indigo,
+                      onPressed: () =>
+                          verifyPhone("+91 " + phoneController.text.trim()),
+                      child: Center(
+                        child: Text(
+                          "Send OTP",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: MaterialButton(
-                  color: Colors.indigo,
-                  onPressed: () => verifyPhone(phoneNo),
-                  child: Text(
-                    "Next",
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
+            SizedBox(height: 60),
             Align(
               alignment: Alignment.bottomCenter,
               child: Row(
@@ -157,7 +211,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     width: 30,
                   ),
                   Text(
-                    "Already a User?",
+                    "Are you an agency ?",
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -167,15 +221,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserLogin(),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => AgencyLogin(),
+                      //   ),
+                      // );
                     },
                     child: Text(
-                      "Login",
+                      "Register here",
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -189,121 +243,6 @@ class _RegisterPageState extends State<RegisterPage> {
           ],
         ),
       ),
-    );
-  }
-
-  void _openFilteredCountryPickerDialog() {
-    showDialog(
-      context: context,
-      child: CountryPickerDialog(
-        titlePadding: EdgeInsets.all(1),
-        title: Text("Select your country"),
-        searchInputDecoration: InputDecoration(
-          hintText: "Seach",
-        ),
-        isSearchable: true,
-        onValuePicked: (Country country) {
-          setState(
-            () {
-              _selectedFilteredDialogCountry = country;
-              _countryCode = country.phoneCode;
-            },
-          );
-        },
-        itemBuilder: _buildDialogItem,
-      ),
-    );
-  }
-
-  Widget _buildDialogItem(Country country) {
-    return Container(
-      height: 40,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey,
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          CountryPickerUtils.getDefaultFlagImage(country),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            " + ${country.phoneCode}",
-            style: TextStyle(color: Color(0xFF818181)),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Text(
-            " ${country.name}",
-            style: TextStyle(
-              color: Color(0xFF818181),
-            ),
-          ),
-          Spacer(),
-          Icon(
-            Icons.keyboard_arrow_down,
-          )
-        ],
-      ),
-    );
-  }
-
-  Future<void> verifyPhone(phoneNo) async {
-    final PhoneVerificationCompleted verified = (AuthCredential authResult) {
-      AuthService().signIn(authResult);
-    };
-
-    final PhoneVerificationFailed verificationfailed = (authException) {
-      print('${authException.message}');
-    };
-
-    final PhoneCodeSent smsSent = (String verId, [int forceResend]) async {
-      this.verificationId = verId;
-      setState(() {
-        this.codeSent = true;
-      });
-      await Fluttertoast.showToast(
-        msg: "OTP send",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OTPScreenPage(
-            phoneNumber: phoneNo,
-            verificationID: verificationId,
-          ),
-        ),
-      );
-    };
-
-    final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {
-      this.verificationId = verId;
-    };
-
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNo,
-      timeout: const Duration(
-        seconds: 30,
-      ),
-      verificationCompleted: verified,
-      verificationFailed: verificationfailed,
-      codeSent: smsSent,
-      codeAutoRetrievalTimeout: autoTimeout,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:Cars/UI/Pages/NamePage/NamePage.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:Cars/backend/FirebaseAuth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OTPScreenPage extends StatefulWidget {
   String phoneNumber;
@@ -68,15 +69,13 @@ class _OTPScreenPageState extends State<OTPScreenPage> {
                   color: Colors.indigo,
                   onPressed: () {
                     AuthService().signInWithOTP(smsCode, widget.verificationID);
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NamePage(
-                          userPhone: widget.phoneNumber.toString(),
-                        ),
-                      ),
-                    );
+                    // User user = FirebaseAuth.instance.currentUser;
+                    // print("uid is ................................"+user.uid);
+                    // if (user.uid != null) {
+
+                    // } else {
+                    //   Navigator.pop(context);
+                    // }
                   },
                   child: Text(
                     "Verify",

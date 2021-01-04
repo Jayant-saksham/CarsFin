@@ -43,7 +43,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RegisterPage(),
+                  builder: (context) => PhoneAuth(),
                 ),
               );
             },
@@ -79,7 +79,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => RegisterPage(),
+                  builder: (context) => PhoneAuth(),
                 ),
               );
             }

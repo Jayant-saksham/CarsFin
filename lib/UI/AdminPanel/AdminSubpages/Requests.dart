@@ -28,6 +28,7 @@ class _RequestsState extends State<Requests> {
 
   void initState() {
     getAllCars();
+
     super.initState();
   }
 

@@ -5,40 +5,46 @@ import 'package:image_picker/image_picker.dart';
 import 'package:Cars/backend/FirebaseBackend.dart';
 import 'package:Cars/Models/Users.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:Cars/Models/Agency.dart';
 
 Users user;
 
-class NamePage extends StatefulWidget {
+class AgencyNamePage extends StatefulWidget {
   String userPhone;
-  NamePage({@required this.userPhone});
+  AgencyNamePage({@required this.userPhone});
   @override
-  _NamePageState createState() => _NamePageState();
+  _AgencyNamePageState createState() => _AgencyNamePageState();
 }
 
-class _NamePageState extends State<NamePage> {
+class _AgencyNamePageState extends State<AgencyNamePage> {
   String get phoneNumber => widget.userPhone;
   final GlobalKey<FormState> _nameKey = GlobalKey<FormState>();
   String userName;
   File userImage;
   String filePath;
+  var agency;
+  String email;
 
   void captureWithCamera() async {
     Navigator.pop(context);
     PickedFile pickedFile =
         await ImagePicker().getImage(source: ImageSource.camera);
-    setState(() {
-      userImage = File(pickedFile.path);
-    });
+    setState(
+      () {
+        userImage = File(pickedFile.path);
+      },
+    );
   }
 
   void pickImageFromGallery() async {
     Navigator.pop(context);
     PickedFile pickedFile =
         await ImagePicker().getImage(source: ImageSource.gallery);
-    setState(() {
-      userImage = File(pickedFile.path);
-    });
+    setState(
+      () {
+        userImage = File(pickedFile.path);
+      },
+    );
   }
 
   Future<void> dialogBox(context) async {
@@ -138,9 +144,7 @@ class _NamePageState extends State<NamePage> {
                     )
                   ],
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 10,
-                ),
+                
                 Padding(
                   padding: EdgeInsets.only(
                     left: 25,
@@ -151,14 +155,26 @@ class _NamePageState extends State<NamePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height / 10,
                 ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 25,
+                    right: 25,
+                  ),
+                  child: _enterEmail(),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 10,
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: MaterialButton(
                     color: Colors.indigo,
                     onPressed: () async {
-                      if (userImage == null || userName == null) {
+                      if (userImage == null ||
+                          userName == null ||
+                          email == null) {
                         Fluttertoast.showToast(
-                          msg: "Image and Name is compulsary",
+                          msg: "All fields are compulsary",
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
@@ -168,21 +184,21 @@ class _NamePageState extends State<NamePage> {
                         );
                       } else {
                         setState(() {
-                          user = Users(
-                            name: userName,
-                            phoneNumber:
-                                FirebaseAuth.instance.currentUser.phoneNumber,
-                            image: userImage,
+                          agency = Agency(
+                            agencyEmail: email,
+                            agencyName: userName,
+                            images: userImage,
+                            agencyPhoneNumber: widget.userPhone,
                           );
                         });
-                        await FirebaseFunctions().createUserRecord(user);
+                        await FirebaseFunctions().createAgency(agency);
                         Navigator.pop(context);
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BottomNavScreen(
                               phoneNumber: user.phoneNumber,
-                              // isAgency: false,
+                              // isAgency: true,
                             ),
                           ),
                           (route) => false,
@@ -226,6 +242,29 @@ class _NamePageState extends State<NamePage> {
       decoration: InputDecoration(
         icon: Icon(Icons.person),
         labelText: 'Name',
+      ),
+    );
+  }
+
+  Widget _enterEmail() {
+    return TextFormField(
+      key: _nameKey,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Cannot be empty';
+        }
+      },
+      onChanged: (value) {
+        setState(
+          () {
+            email = value;
+          },
+        );
+      },
+      keyboardType: TextInputType.emailAddress,
+      decoration: InputDecoration(
+        icon: Icon(Icons.email),
+        labelText: 'Email',
       ),
     );
   }

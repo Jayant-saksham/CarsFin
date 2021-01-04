@@ -5,8 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:Cars/backend/FirebaseAuth.dart';
 import 'package:Cars/backend/FirebaseBackend.dart';
+import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
 
 bool isExist;
+
+var userReference = FirebaseFirestore.instance.collection("Users");
 
 class UserLogin extends StatefulWidget {
   @override
@@ -88,15 +91,6 @@ class _UserLoginState extends State<UserLogin> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                codeSent
-                    ? Padding(
-                        padding: EdgeInsets.only(
-                          left: 25,
-                          right: 25,
-                        ),
-                        child: _enterOTP(),
-                      )
-                    : Text(""),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.05,
                 ),
@@ -107,46 +101,46 @@ class _UserLoginState extends State<UserLogin> {
                   ),
                   child: MaterialButton(
                     color: Colors.indigo,
-                    child: codeSent
-                        ? Text(
-                            "Login",
-                            style: TextStyle(color: Colors.white),
-                          )
-                        : Text(
-                            "Verify",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                    onPressed: codeSent
-                        ? () {
-                            AuthService()
-                                .signInWithOTP(smsCode, verificationId);
-                          }
-                        : () {
-                            checkIfUserExist(phoneNo);
-                            if (isExist) {
-                              Fluttertoast.showToast(
-                                msg: "User exist",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.black,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                              verifyPhone(phoneNo);
-                            } else {
-                              Fluttertoast.showToast(
-                                msg: "User does not exist",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.black,
-                                textColor: Colors.white,
-                                fontSize: 16.0,
-                              );
-                              Navigator.pop(context);
-                            }
-                          },
+                    child: Text(
+                      "Verify",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      await checkIfUserExist(phoneNo);
+                      if (isExist) {
+                        Fluttertoast.showToast(
+                          msg: "User exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        verifyPhone(phoneNo);
+                        // Navigator.pop(context);
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => LoginOTP(
+                        //         phoneNumber: phoneNo,
+                        //         verificationID: verificationId,
+                        //         name: name,
+                        //       ),
+                        //     ));
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "User does not exist",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                        Navigator.pop(context);
+                      }
+                    },
                   ),
 
                   // child: InkWell(
@@ -285,8 +279,20 @@ class _UserLoginState extends State<UserLogin> {
   }
 
   Future<void> verifyPhone(phoneNo) async {
-    final PhoneVerificationCompleted verified = (AuthCredential authResult) {
+    final PhoneVerificationCompleted verified =
+        (AuthCredential authResult) async {
       AuthService().signIn(authResult);
+      // Navigator.pop(context);
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (context) => BottomNavScreen(
+      //       name: name,
+      //       phoneNumber: phoneNo,
+      //     ),
+      //   ),
+      //   (route) => false,
+      // );
     };
 
     final PhoneVerificationFailed verificationfailed = (authException) {
@@ -298,19 +304,26 @@ class _UserLoginState extends State<UserLogin> {
       setState(() {
         this.codeSent = true;
       });
-
-      // Navigator.pop(context);
-      // await Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) {
-      //       LoginOTP(
-      //         phoneNumber: phoneNo,
-      //         verificationID: verificationId,
-      //       );
-      //     },
-      //   ),
-      // );
+      await Fluttertoast.showToast(
+        msg: "OTP send",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginOTP(
+            phoneNumber: phoneNo,
+            verificationID: verificationId,
+            name: name,
+          ),
+        ),
+      );
     };
 
     final PhoneCodeAutoRetrievalTimeout autoTimeout = (String verId) {

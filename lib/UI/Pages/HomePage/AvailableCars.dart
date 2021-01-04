@@ -63,57 +63,58 @@ class _AvailableCarsState extends State<AvailableCars> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: appBar(
-          title: "Available Cars  " + carsLength.toString(),
-          isLeading: true,
-          isAction: true,
-          action: IconButton(
-            icon: Icon(
-              Icons.search,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.drive_eta),
+      appBar: appBar(
+        title: "Available Cars  " + carsLength.toString(),
+        isLeading: true,
+        isAction: true,
+        action: IconButton(
+          icon: Icon(
+            Icons.search,
             color: Colors.black,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Login(),
-                ),
-              );
-            },
           ),
+          onPressed: () {},
         ),
-        backgroundColor: HexColor('#F8FAFB'),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection("Cars").snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return ListView(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                children: cars.map((item) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BookCar(car: item),
-                        ),
-                      );
-                    },
-                    child: carAdLong(item, 0),
-                  );
-                }).toList(),
-              );
-            } else {
-              return circularProgress();
-            }
+        leading: IconButton(
+          icon: Icon(Icons.drive_eta),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => Login(),
+              ),
+            );
           },
-        ));
+        ),
+      ),
+      backgroundColor: HexColor('#F8FAFB'),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Cars").snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.vertical,
+              children: cars.map((item) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BookCar(car: item),
+                      ),
+                    );
+                  },
+                  child: carAdLong(item, 0),
+                );
+              }).toList(),
+            );
+          } else {
+            return circularProgress();
+          }
+        },
+      ),
+    );
   }
 
   List<Widget> buildcarLong() {

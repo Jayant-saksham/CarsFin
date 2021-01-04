@@ -2,9 +2,7 @@ import 'package:Cars/Themes/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/backend/FirebaseAuth.dart';
-import 'package:Cars/UI/Pages/Login/Login.dart';
-import 'package:Cars/UI/AdminPanel/AdminPanel.dart';
-import 'package:Cars/UI/Pages/SellCar/SellCar.dart';
+
 import 'package:Cars/UI/Pages/ContactUs/ContactUs.dart';
 import 'package:Cars/UI/Pages/HomePage/AvailableCars.dart';
 import 'package:Cars/UI/Pages/UserProfile/UserProfile.dart';
@@ -82,7 +80,11 @@ Widget myDrawer(
             title: Text("Help"),
             leading: Icon(EvaIcons.questionMarkCircleOutline),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ContactUs(),));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ContactUs(),
+                  ));
             }),
         SizedBox(height: 10),
         ListTile(
@@ -100,10 +102,13 @@ Widget myDrawer(
             }),
         SizedBox(height: 10),
         ListTile(
-          title: Text("Logout"),
-          leading: Icon(EvaIcons.logOut),
-          onTap: () => AuthService().signOut(),
-        ),
+            title: Text("Logout"),
+            leading: Icon(EvaIcons.logOut),
+            onTap: () async {
+              await AuthService().signOut().then((value) {
+                Navigator.popUntil(context, (route) => false);
+              });
+            }),
         SizedBox(
           height: 100,
         ),

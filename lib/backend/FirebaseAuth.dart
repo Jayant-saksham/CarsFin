@@ -4,8 +4,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+var userReference = FirebaseFirestore.instance.collection("Users");
 
 Users users;
+bool isExist = false;
+String name;
 
 final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
@@ -15,21 +20,9 @@ class AuthService {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          String userName = "";
-          String image = "";
-          var user = FirebaseAuth.instance.currentUser;
-          String userPhoneNumber = user.phoneNumber;
-          userPhoneNumber = userPhoneNumber.substring(0, 3) +
-              " " +
-              userPhoneNumber.substring(3, 13);
-          userReference.doc(userPhoneNumber).get().then((value) {
-            userName = value.data()["userName"];
-            print(userName);
-          });
-
           return BottomNavScreen(
-            name: userName,
-            phoneNumber: userPhoneNumber,
+            phoneNumber: firebaseAuth.currentUser.phoneNumber,
+            // isAgency: false,
           );
         } else {
           return OnBoardingScreen();
@@ -38,7 +31,16 @@ class AuthService {
     );
   }
 
-  void signOut() {
+  checkIfUserExist(String phoneNumber) async {
+    final DocumentSnapshot documentSnapshot =
+        await userReference.doc(phoneNumber).get();
+    if (documentSnapshot.exists) {
+      isExist = true;
+      name = documentSnapshot.data()["userName"];
+    }
+  }
+
+  Future signOut() {
     FirebaseAuth.instance.signOut();
   }
 
@@ -46,11 +48,12 @@ class AuthService {
     await FirebaseAuth.instance.signInWithCredential(authCredential);
   }
 
-  void signInWithOTP(smsCode, verificationID) {
+  signInWithOTP(smsCode, verificationID) {
     AuthCredential authCredential = PhoneAuthProvider.credential(
       verificationId: verificationID,
       smsCode: smsCode,
     );
     signIn(authCredential);
+    // return firebaseAuth.currentUser.uid;
   }
 }

@@ -5,7 +5,7 @@ import 'DonePage.dart';
 import 'Conformation.dart';
 import 'dart:io';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 List<File> fileImageArray = [];
 
 class SellCar4 extends StatefulWidget {
@@ -169,29 +169,7 @@ class _SellCar4State extends State<SellCar4> {
             SizedBox(
               height: 10,
             ),
-            Padding(
-              padding: EdgeInsets.only(
-                left: 30,
-                right: 30,
-                top: 10,
-              ),
-              child: images.length > 0
-                  ? Container(
-                      child: SingleChildScrollView(
-                        child: ListView(
-                          children: images.map((image) {
-                            ListTile(
-                              leading: Image.asset(image.toString()),
-                              title: Text("Hello"),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      color: Colors.amber,
-                    ),
-            ),
+
             SizedBox(
               height: 10,
             ),
@@ -222,29 +200,42 @@ class _SellCar4State extends State<SellCar4> {
               child: MaterialButton(
                 color: Colors.indigo,
                 onPressed: () {
-                  print(images.length);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConfirmationPage(
-                        carBrand: widget.carBrand,
-                        images: fileImageArray,
-                        carNumber: widget.carNumber,
-                        hasRC: widget.hasCarRC,
-                        name: widget.name,
-                        phoneNumber: widget.phoneNumber,
-                        hasInsurance: widget.hasInsuranc,
-                        hasPollution: widget.hasPollutio,
-                        kmDriven: widget.kmDriven,
-                        location: widget.location,
-                        carModel: widget.modelNumber,
-                        price: widget.price,
-                        email: widget.email,
-                        ownerShip: widget.ownerShip,
-                        milage: milage,
+                  if (fileImageArray.isEmpty || milage==null) {
+                    Fluttertoast.showToast(
+                      msg: "All field are compulsary",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      fontSize: 16.0,
+                    );
+                  }
+                   else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmationPage(
+                          carBrand: widget.carBrand,
+                          images: fileImageArray,
+                          carNumber: widget.carNumber,
+                          hasRC: widget.hasCarRC,
+                          name: widget.name,
+                          phoneNumber: widget.phoneNumber,
+                          hasInsurance: widget.hasInsuranc,
+                          hasPollution: widget.hasPollutio,
+                          kmDriven: widget.kmDriven,
+                          location: widget.location,
+                          carModel: widget.modelNumber,
+                          price: widget.price,
+                          email: widget.email,
+                          ownerShip: widget.ownerShip,
+                          milage: milage,
+                          dateofPurchase: widget.date,
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: Text(
                   "Continue",

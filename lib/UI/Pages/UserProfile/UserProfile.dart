@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'Clipper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:Cars/UI/Widgets/circularProgress.dart';
 
 var userReference = FirebaseFirestore.instance.collection("Users");
 
@@ -12,24 +13,31 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String userName;
-  String imageUrl;
-  Future getUser() async {
-    String phoneNumber = await FirebaseAuth.instance.currentUser.phoneNumber;
-    print(phoneNumber);
-    String phoneNumbe =
-        phoneNumber.substring(0, 3) + " " + phoneNumber.substring(3, 13);
-    print(phoneNumbe);
+  String image;
+  bool isExist = false;
+  var user;
+
+  String phoneNo, verificationId, smsCode;
+  Future<bool> checkIfUserExist(String phoneNumber) async {
     final DocumentSnapshot documentSnapshot =
-        await userReference.doc(phoneNumbe).get();
-    setState(() {
-      userName = documentSnapshot.data()['userName'];
-      imageUrl = documentSnapshot.data()["Image"];
-    });
+        await userReference.doc(phoneNumber).get();
+    if (documentSnapshot.exists) {
+      setState(() {
+        isExist = true;
+        userName = documentSnapshot.data()["userName"];
+        image = documentSnapshot.data()["Image"];
+      });
+    } else {
+      setState(() {
+        isExist = false;
+      });
+    }
+    return isExist;
   }
 
   @override
   void initState() {
-    getUser();
+    checkIfUserExist(FirebaseAuth.instance.currentUser.phoneNumber);
     super.initState();
   }
 
@@ -51,20 +59,30 @@ class _ProfileState extends State<Profile> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(130),
-                  child: Image(
-                    image: NetworkImage(
-                      imageUrl==null?"":imageUrl,
-                    ),
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
+                  child: image == null
+                      ? circularProgress()
+                      : Image(
+                          image: NetworkImage(
+                            image == null ? "" : image,
+                          ),
+                          width: 200,
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 SizedBox(height: 90.0),
                 Text(
                   userName == null ? "User" : userName,
                   style: TextStyle(
                     fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                Text(
+                  FirebaseAuth.instance.currentUser.phoneNumber,
+                  style: TextStyle(
+                    fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

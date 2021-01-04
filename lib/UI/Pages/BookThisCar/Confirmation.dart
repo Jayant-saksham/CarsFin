@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Cars/UI/BottomNavBar/BottomNavBar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Confirmation extends StatefulWidget {
   @override
@@ -63,7 +64,10 @@ class _ConfirmationState extends State<Confirmation> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BottomNavScreen(),
+                  builder: (context) => BottomNavScreen(
+                    phoneNumber: FirebaseAuth.instance.currentUser.phoneNumber,
+                    // isAgency: false,
+                  ),
                 ),
               );
             },

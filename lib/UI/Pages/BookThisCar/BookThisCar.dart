@@ -118,10 +118,11 @@ class _BookThisCarState extends State<BookThisCar> {
                           );
 
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Confirmation(),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Confirmation(),
+                            ),
+                          );
                         }
                       },
                       child: Container(
