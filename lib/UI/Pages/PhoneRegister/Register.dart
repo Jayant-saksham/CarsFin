@@ -79,15 +79,16 @@ class _PhoneAuthState extends State<PhoneAuth> {
     var _authCredential = PhoneAuthProvider.getCredential(
         verificationId: verificationId, smsCode: smsCode);
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return Container(
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Container(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
     firebaseAuth.signInWithCredential(_authCredential).then((result) {
       User user = result.user;
 

@@ -7,14 +7,13 @@ class AdminCard extends StatelessWidget {
   String title;
   String content;
   Icon titleIcon;
-  AdminCard({
-    this.backgroundColor,
-    this.content,
-    this.contentColor,
-    this.title,
-    this.titleColor,
-    this.titleIcon
-  });
+  AdminCard(
+      {this.backgroundColor,
+      this.content,
+      this.contentColor,
+      this.title,
+      this.titleColor,
+      this.titleIcon});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,14 +38,10 @@ class AdminCard extends StatelessWidget {
           Text(
             content,
             style: TextStyle(
-              color: contentColor,
-              fontSize: 22,
-              fontWeight: FontWeight.bold
-            ),
+                color: contentColor, fontSize: 22, fontWeight: FontWeight.bold),
           ),
         ],
       ),
     );
   }
 }
-

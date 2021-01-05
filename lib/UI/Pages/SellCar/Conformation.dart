@@ -124,8 +124,19 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
             alignment: Alignment.bottomCenter,
             child: MaterialButton(
               color: Colors.indigo,
-              onPressed: () {
-                FirebaseFunctions().createCarRecord(car);
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) {
+                    return Container(
+                      child: Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  },
+                );
+                await FirebaseFunctions().createCarRecord(car);
                 isUploaded = true;
                 Navigator.push(
                   context,

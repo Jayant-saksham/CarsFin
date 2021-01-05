@@ -175,6 +175,17 @@ class _NamePageState extends State<NamePage> {
                             image: userImage,
                           );
                         });
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return Container(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                        );
                         await FirebaseFunctions().createUserRecord(user);
                         Navigator.pop(context);
                         Navigator.pushAndRemoveUntil(

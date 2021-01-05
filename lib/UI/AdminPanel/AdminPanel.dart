@@ -6,6 +6,8 @@ import 'AdminWidgets/AdminDrawer.dart';
 import 'AdminSubpages/Settings.dart';
 import 'package:Cars/backend/FirebaseAdmin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'AdminSubpages/Users.dart';
+import 'AdminSubpages/Cars.dart';
 
 String imageUrl =
     'https://scontent.fdel5-1.fna.fbcdn.net/v/t1.0-9/480128_4549413205633_620077564_n.jpg?_nc_cat=110&ccb=2&_nc_sid=de6eea&_nc_ohc=g2eXmmK70kAAX8F5J6A&_nc_ht=scontent.fdel5-1.fna&oh=193ce9613936ce743efebab7d0b200e5&oe=60013BFF';
@@ -120,12 +122,15 @@ class _AdminPanelState extends State<AdminPanel> {
             SizedBox(
               height: 28,
             ),
-            Text(
-              "Welcome Admin",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            InkWell(
+              onTap: () {},
+              child: Text(
+                "Welcome Admin",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
             SizedBox(
@@ -163,25 +168,35 @@ class _AdminPanelState extends State<AdminPanel> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                AdminCard(
-                  titleIcon:
-                      Icon(Icons.supervised_user_circle, color: Colors.white),
-                  backgroundColor: Colors.amber,
-                  title: "Users",
-                  content: countUsers.toString(),
-                  titleColor: Colors.indigo,
-                  contentColor: Colors.white,
-                ),
-                AdminCard(
-                  titleIcon: Icon(
-                    Icons.drive_eta,
-                    color: Colors.white,
+                InkWell(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AllUsers()),
                   ),
-                  backgroundColor: Colors.indigo,
-                  title: "Cars",
-                  content: countCar.toString(),
-                  titleColor: Colors.amber,
-                  contentColor: Colors.white,
+                  child: AdminCard(
+                    titleIcon:
+                        Icon(Icons.supervised_user_circle, color: Colors.white),
+                    backgroundColor: Colors.amber,
+                    title: "Users",
+                    content: countUsers.toString(),
+                    titleColor: Colors.indigo,
+                    contentColor: Colors.white,
+                  ),
+                ),
+                InkWell(
+                  onTap: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AllCars())),
+                  child: AdminCard(
+                    titleIcon: Icon(
+                      Icons.drive_eta,
+                      color: Colors.white,
+                    ),
+                    backgroundColor: Colors.indigo,
+                    title: "Cars",
+                    content: countCar.toString(),
+                    titleColor: Colors.amber,
+                    contentColor: Colors.white,
+                  ),
                 ),
               ],
             ),
