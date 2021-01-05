@@ -325,16 +325,13 @@ class _RequestsState extends State<Requests> {
                                                 );
                                                 await approveCar(
                                                     car["Car Number"]);
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) =>
-                                                          leadDialog(
-                                                    carNumber:
-                                                        car["Car Number"],
-                                                    carName: car["Car brand"],
-                                                    carModel: car["Car Model"],
-                                                  ),
+                                                Navigator.pop(context);
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          super.widget),
                                                 );
                                               },
                                               child: Container(
@@ -358,21 +355,57 @@ class _RequestsState extends State<Requests> {
                                                 ),
                                               ),
                                             )
-                                          : Container(
-                                              width: 90,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius:
-                                                    BorderRadius.circular(3),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Approved",
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
+                                          : InkWell(
+                                              onTap: () async {
+                                                showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (context) {
+                                                    return Container(
+                                                      child: Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
+                                                    );
+                                                  },
+                                                );
+                                                await approveCar(
+                                                    car["Car Number"]);
+                                                Navigator.pop(context);
+                                                Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          super.widget),
+                                                );
+                                                // Navigator.push(
+                                                //   context,
+                                                //   leadDialog(
+                                                //     carModel: car["Car Model"],
+                                                //     carName: car["Car brand"],
+                                                //     carNumber:
+                                                //         car["Car Number"],
+                                                //   ),
+                                                // );
+                                              },
+                                              child: Container(
+                                                width: 90,
+                                                height: 30,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius:
+                                                      BorderRadius.circular(3),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Approved",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 18,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -427,23 +460,38 @@ class _RequestsState extends State<Requests> {
     );
   }
 
-  Future <void>approveCar(carNumber) async {
+  Future<void> approveCar(carNumber) async {
     int approvedCars;
-    var response = await FirebaseFirestore.instance;
-    response.collection("Cars").doc(carNumber).update(
+    bool isApproved;
+    var response = FirebaseFirestore.instance;
+    await response.collection("Cars").doc(carNumber).get().then((snapshot) {
+      setState(() {
+        isApproved = snapshot.data()["Is Approved"];
+      });
+    });
+
+    await response.collection("Cars").doc(carNumber).update(
       {
-        "Is Approved": true,
+        "Is Approved": !isApproved,
       },
     );
-    response.collection("Admin").doc("Admin").get().then((value) {
+    await response.collection("Admin").doc("Admin").get().then((value) {
       setState(() {
         approvedCars = value.data()["Cars Approved"];
       });
     });
-    response.collection("Admin").doc("Admin").update(
-      {
-        "Cars Approved": approvedCars + 1,
-      },
-    );
+    if (isApproved) {
+      await response.collection("Admin").doc("Admin").update(
+        {
+          "Cars Approved": approvedCars - 1,
+        },
+      );
+    } else {
+      await response.collection("Admin").doc("Admin").update(
+        {
+          "Cars Approved": approvedCars + 1,
+        },
+      );
+    }
   }
 }
