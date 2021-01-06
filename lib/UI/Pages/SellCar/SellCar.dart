@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:Cars/UI/Widgets/AppBar.dart';
 import 'SellCar2.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:Cars/UI/Widgets/circularProgress.dart';
+
+var brandReference = FirebaseFirestore.instance.collection("Brands");
 
 class SellCar extends StatefulWidget {
   @override
@@ -13,6 +17,27 @@ class _SellCarState extends State<SellCar> {
   String dmDriven;
   String carbrand;
   String modelNumber;
+  List brands = [];
+  getAllBrands() async {
+    await brandReference.get().then(
+      (snapshot) {
+        snapshot.docs.forEach(
+          (element) {
+            setState(() {
+              brands.add(element.data());
+            });
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getAllBrands();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,11 +54,14 @@ class _SellCarState extends State<SellCar> {
                 height: 10,
               ),
               Center(
-                child: Text(
-                  "Enter the details of your Car",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
+                child: InkWell(
+                  onTap: () => chooseBrand(),
+                  child: Text(
+                    "Enter the details of your Car",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),
@@ -236,6 +264,33 @@ class _SellCarState extends State<SellCar> {
         setState(() {
           dmDriven = value.toString().trim();
         });
+      },
+    );
+  }
+
+  Widget chooseBrand() {
+    return StreamBuilder(
+      stream: brandReference.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Dialog(
+            child: Container(
+              child: ListView(
+                children: brands.map((brand) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        brand["Image"],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          );
+        } else {
+          return circularProgress();
+        }
       },
     );
   }

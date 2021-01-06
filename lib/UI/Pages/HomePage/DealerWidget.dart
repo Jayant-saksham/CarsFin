@@ -20,10 +20,10 @@ Widget buildDealer(Brand dealer, int index) {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            // image: DecorationImage(
-            //   image: AssetImage(dealer.image),
-            //   fit: BoxFit.cover,
-            // ),
+            image: DecorationImage(
+              image: NetworkImage(dealer.imageUrl),
+              fit: BoxFit.cover,
+            ),
             borderRadius: BorderRadius.all(
               Radius.circular(15),
             ),
@@ -43,7 +43,7 @@ Widget buildDealer(Brand dealer, int index) {
           ),
         ),
         Text(
-          dealer.offers.toString() + " offers",
+          dealer.offers.toString() + " deals",
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey,

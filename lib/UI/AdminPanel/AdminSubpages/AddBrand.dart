@@ -131,9 +131,10 @@ class _AddBrandState extends State<AddBrand> {
                 children: brands.map((brand) {
                   return ListTile(
                     leading: CircleAvatar(
+                      backgroundColor: Colors.transparent,
                       backgroundImage: NetworkImage(brand["Image"]),
                     ),
-                    subtitle: Text(brand["Deals"].toString()),
+                    subtitle: Text(brand["Deals"].toString() + " deals"),
                     title: Text(brand["Brand"]),
                   );
                 }).toList(),
@@ -273,6 +274,7 @@ class _AddBrandState extends State<AddBrand> {
                                         super.widget,
                                   ),
                                 );
+                                Navigator.pop(context);
                               }
                             },
                           ),
@@ -284,9 +286,10 @@ class _AddBrandState extends State<AddBrand> {
                                   Text(
                                     "Cancel",
                                     style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                   Icon(Icons.cancel, color: Colors.white),
                                 ],

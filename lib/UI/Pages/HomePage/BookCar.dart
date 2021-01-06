@@ -328,11 +328,13 @@ class _BookCarState extends State<BookCar> {
             InkWell(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BookThisCar(
-                              car: widget.car,
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookThisCar(
+                      car: widget.car,
+                    ),
+                  ),
+                );
               },
               child: Container(
                 height: 50,

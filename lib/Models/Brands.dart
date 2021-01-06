@@ -1,12 +1,15 @@
 import 'dart:io';
+
 class Brand {
   String name;
   int offers;
   File image;
+  String imageUrl;
   Brand({
     this.name,
     this.image,
     this.offers,
+    this.imageUrl,
   });
 }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:Cars/Models/Cars.dart';
-import 'package:Cars/Themes/constants.dart';
 
 Widget buildCar(Car car, int index) {
   return SingleChildScrollView(
@@ -56,7 +55,7 @@ Widget buildCar(Car car, int index) {
               child: Hero(
                 tag: car.model,
                 child: ClipRRect(
-                   borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
                     car.images[0],
                     fit: BoxFit.fitWidth,
