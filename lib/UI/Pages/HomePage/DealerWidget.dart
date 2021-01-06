@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:Cars/Models/Dealers.dart';
+import 'package:Cars/Models/Brands.dart';
 
-Widget buildDealer(Dealer dealer, int index) {
+Widget buildDealer(Brand dealer, int index) {
   return Container(
     decoration: BoxDecoration(
       color: Colors.white,
@@ -20,10 +20,10 @@ Widget buildDealer(Dealer dealer, int index) {
       children: <Widget>[
         Container(
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(dealer.image),
-              fit: BoxFit.cover,
-            ),
+            // image: DecorationImage(
+            //   image: AssetImage(dealer.image),
+            //   fit: BoxFit.cover,
+            // ),
             borderRadius: BorderRadius.all(
               Radius.circular(15),
             ),

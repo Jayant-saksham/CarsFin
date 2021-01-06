@@ -12,16 +12,14 @@ class AllUsers extends StatefulWidget {
 }
 
 class AllUsersState extends State<AllUsers> {
-  List name = [];
-  List images = [];
+  List users = [];
   getAllUser() async {
     userReference.get().then(
       (snapshot) {
         snapshot.docs.forEach(
           (element) {
             setState(() {
-              name.add(element.data()["userName"]);
-              images.add(element.data()["Image"]);
+              users.add(element.data());
             });
           },
         );
@@ -56,10 +54,127 @@ class AllUsersState extends State<AllUsers> {
           if (snapshot.hasData) {
             return Container(
               child: ListView(
-                children: name.map((c) {
+                children: users.map((user) {
                   return ListTile(
-                    leading: CircleAvatar(),
-                    title: Text(c),
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(user["Image"]),
+                    ),
+                    subtitle: Text(user["Phone Number"]),
+                    title: Text(user["userName"]),
+                    trailing: IconButton(
+                      icon: Icon(Icons.delete),
+                      color: Colors.red,
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Container(
+                                height: 300,
+                                width: 300,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 50,
+                                      backgroundImage:
+                                          NetworkImage(user["Image"]),
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "Confirm to delete ${user["userName"]} ? ",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 30,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        MaterialButton(
+                                          color: Colors.red,
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "Delete",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                                Icon(Icons.delete,
+                                                    color: Colors.white),
+                                              ],
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            showDialog(
+                                              context: context,
+                                              barrierDismissible: false,
+                                              builder: (context) {
+                                                return Container(
+                                                  child: Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                            await deleteUser(
+                                                user["Phone Number"]);
+                                            Navigator.pop(context);
+                                            Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) =>
+                                                        super.widget,
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        MaterialButton(
+                                          color: Colors.green,
+                                          child: Center(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  "Cancel",
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16),
+                                                ),
+                                                Icon(Icons.cancel,
+                                                    color: Colors.white),
+                                              ],
+                                            ),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
                 }).toList(),
               ),
@@ -71,22 +186,9 @@ class AllUsersState extends State<AllUsers> {
       ),
     );
   }
-}
 
-// body: ListView(
-//         physics: BouncingScrollPhysics(),
-//         scrollDirection: Axis.vertical,
-//         children: cars.map((item) {
-//           return GestureDetector(
-//             onTap: () {
-//               Navigator.push(
-//                 context,
-//                 MaterialPageRoute(
-//                   builder: (context) => BookCar(car: item),
-//                 ),
-//               );
-//             },
-//             child: carAdLong(item, 0),
-//           );
-//         }).toList(),
-//       ),
+  Future<void> deleteUser(String phoneNumber) async {
+    var response = FirebaseFirestore.instance;
+    await response.collection("Users").doc(phoneNumber).delete();
+  }
+}

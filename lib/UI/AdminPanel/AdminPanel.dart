@@ -233,7 +233,6 @@ class _AdminPanelState extends State<AdminPanel> {
           );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

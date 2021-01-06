@@ -6,7 +6,7 @@ Widget carAdLong(Car car, context) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
-      height: 360,
+      height: 320,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
@@ -26,6 +26,10 @@ Widget carAdLong(Car car, context) {
                       fontSize: 25,
                     ),
                   ),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundImage: NetworkImage(car.images[0]),
+                  )
                 ],
               ),
               SizedBox(
@@ -232,13 +236,13 @@ Widget carAdLong(Car car, context) {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Text(
                         car.carNumber,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18
-                        ),
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ],
                   ),

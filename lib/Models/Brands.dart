@@ -1,8 +1,9 @@
-class Dealer {
+import 'dart:io';
+class Brand {
   String name;
   int offers;
-  String image;
-  Dealer({
+  File image;
+  Brand({
     this.name,
     this.image,
     this.offers,
